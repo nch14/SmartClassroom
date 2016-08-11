@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:id="@+id/month"
+            android:orientation="vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="月"
+            android:id="@+id/textView9"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="48dp" />
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:id="@+id/day"
+            android:orientation="horizontal"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日"
+            android:id="@+id/textView10"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="48dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:id="@+id/hour"
+            android:orientation="vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1" >
+        </NumberPicker>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="："
+            android:id="@+id/textView11"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="48dp" />
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:id="@+id/minite"
+            android:orientation="horizontal"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1" >
+        </NumberPicker>
+
+    </LinearLayout>
+
+
+</LinearLayout>

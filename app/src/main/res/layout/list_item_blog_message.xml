@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="标签：每日打卡"
+            android:id="@+id/tag"
+            android:textSize="10sp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/head"
+            android:id="@+id/head"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="5dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="白马啸西风"
+                android:id="@+id/nick_name"
+                android:layout_marginTop="8dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="没签名，注孤生"
+                android:id="@+id/motto"
+                android:textSize="10sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2012年10月24日"
+            android:id="@+id/send_time"
+            android:textSize="10sp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="洛枳喜欢盛淮南，谁都不知道！"
+            android:id="@+id/text"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_love_b"
+            android:id="@+id/like"
+            android:layout_weight="1"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dislike"
+            android:src="@drawable/ic_dislike_b"
+            android:layout_weight="1"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/comment"
+            android:id="@+id/comment"
+            android:layout_weight="1"
+            android:clickable="true" />
+    </LinearLayout>
+</LinearLayout>

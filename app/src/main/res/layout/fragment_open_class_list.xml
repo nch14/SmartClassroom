@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView" />
+
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="暂时没有开放的教室"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+</LinearLayout>

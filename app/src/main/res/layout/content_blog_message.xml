@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.chenh.smartclassroom.view.blog.BlogMessageActivity"
+    tools:showIn="@layout/activity_blog_message">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.chenh.smartclassroom.view.blog.CommentActivity"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="#ffffff">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="标签：每日打卡"
+                    android:id="@+id/tag"
+                    android:textSize="10sp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="12dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/head"
+                    android:id="@+id/head"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="5dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="白马啸西风"
+                        android:id="@+id/nick_name"
+                        android:layout_marginTop="8dp"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="没签名，注孤生"
+                        android:id="@+id/motto"
+                        android:textSize="10sp"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2012年10月24日"
+                    android:id="@+id/send_time"
+                    android:textSize="10sp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="洛枳喜欢盛淮南，谁都不知道！"
+                    android:id="@+id/text"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="赞：50"
+                    android:id="@+id/like_num"
+                    android:layout_marginLeft="12dp"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="砸：40"
+                    android:id="@+id/dislike_num"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="评论：0"
+                    android:id="@+id/comments_num"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+        
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView" />
+
+
+        <TextView
+            android:id="@+id/emptyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="还没有评论或评论正在加载中"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="#ffffff"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+
+
+    </LinearLayout>
+</RelativeLayout>
