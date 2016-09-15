@@ -71,14 +71,6 @@ public class LocalMessage {
             mHandler.sendMessage(mHandler.obtainMessage(BlogFragment.LOAD_FINISHED,""));
     }
 
-/*    public void addAttitudes(ArrayList<AttitudeVO> attitudeVOs){
-        for (AttitudeVO attitudeVO:attitudeVOs){
-            this.attitudeVOs.add(attitudeVO);
-        }
-        sortAttitude();
-
-    }*/
-
     public void addAttitudes(long sheetId,ArrayList<AttitudeVO> attitudeVOs){
         BlogMessage blogMessage=getSheet(sheetId);
         blogMessage.like=new ArrayList<>();
@@ -129,6 +121,12 @@ public class LocalMessage {
 
     public void sort(){
         Collections.sort(blogMessages,comparator);
+        for(int i=0;i<blogMessages.size()-1;i++){
+            if (blogMessages.get(i).id==blogMessages.get(i+1).id){
+                blogMessages.remove(i);
+                i--;
+            }
+        }
     }
 
     Comparator<BlogMessage> comparator = new Comparator<BlogMessage>(){

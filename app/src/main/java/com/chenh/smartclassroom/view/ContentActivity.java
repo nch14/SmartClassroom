@@ -44,8 +44,6 @@ public class ContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -58,12 +56,6 @@ public class ContentActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        /*//透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //透明导航栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);*/
-
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -164,7 +156,7 @@ public class ContentActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 4;
+            return 5;
         }
 
         @Override
@@ -175,8 +167,10 @@ public class ContentActivity extends AppCompatActivity {
                 case 1:
                     return "课间校内";
                 case 2:
-                    return "消息";
+                    return "课程";
                 case 3:
+                    return "消息";
+                case 4:
                     return "个人";
             }
             return null;

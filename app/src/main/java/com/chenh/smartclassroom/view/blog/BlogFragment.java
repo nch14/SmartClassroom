@@ -1,11 +1,9 @@
 package com.chenh.smartclassroom.view.blog;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +31,6 @@ import java.util.ArrayList;
  * Created by chenh on 2016/8/1.
  */
 public class BlogFragment extends ContentFragment {
-
 
     public static final int LOAD_MORE=1;
     public static final int LOAD_MORE_FINISHED=2;
@@ -239,18 +236,4 @@ public class BlogFragment extends ContentFragment {
             return convertView;
         }
     }
-
-
-   /* private void showLoadingDialog(){
-        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-        View vv = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_loading, null);
-        builder.setView(vv);
-        builder.setCancelable(false);
-        builder.show();
     }
-
-    *//*private void hideLoadingDialog(){
-        dialog.dismiss();
-    }*/
-
-}

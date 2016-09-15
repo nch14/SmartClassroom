@@ -1,15 +1,25 @@
 package com.chenh.smartclassroom.net;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Handler;
+
 import com.chenh.smartclassroom.model.LocalAvailableClassroom;
 import com.chenh.smartclassroom.model.LocalClassroom;
 import com.chenh.smartclassroom.model.LocalComment;
+import com.chenh.smartclassroom.model.LocalCourse;
 import com.chenh.smartclassroom.model.LocalMessage;
 import com.chenh.smartclassroom.model.LocalUser;
+import com.chenh.smartclassroom.util.CurrentStateTool;
 import com.chenh.smartclassroom.util.json.JsonUtil;
 import com.chenh.smartclassroom.vo.AttitudeVO;
 import com.chenh.smartclassroom.vo.BlogComments;
 import com.chenh.smartclassroom.vo.BlogMessage;
 import com.chenh.smartclassroom.vo.Classroom;
+import com.chenh.smartclassroom.vo.TimeTableCourse;
 import com.chenh.smartclassroom.vo.User;
 
 import org.json.JSONException;
@@ -58,49 +68,87 @@ public class Client {
     public final static int ASK_FOR_AVAILABLE_CLASSROOM_RESULT=17;
 
 
+    public final static int GET_MY_COURSE=1001;
+    public final static int GET_MY_COURSE_RESULT=1002;
 
-    public static final String IP_ADDR = "192.168.1.101";//服务器地址  这里要改成服务器的ip
+
+    public static final String IP_ADDR = "ss.chenhaonee.cn";//服务器地址  这里要改成服务器的ip
     public static final int PORT = 12346;//服务器端口号
     private static ArrayList<String> messages;
+    /**
+     * 和服务器端的管道入口
+     */
     private Socket socket;
-
-    private boolean netCannotConnect;
 
     private static Client client;
 
-
+    /**
+     * IO（网络异常标志位）
+     */
     private boolean exception;
 
+    /**
+     * 当前正在处理的消息、即将发给服务器
+     */
+    public static String writeMessageCache;
 
-    public static void createClient(){
-        client=new Client();
-    }
-    public static Client getClient(){
-        return client;
-    }
+    private int maxRetryTimes=5;
 
-    private Client(){
+    private int retryTimes=0;
+
+    public static void netControl(){
         messages=new ArrayList<>();
+        client=new Client();
+        client.exception=false;
+        netOn();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    socket = new Socket(IP_ADDR, PORT);
-                    startWorking();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    netCannotConnect=true;
+                while (true){
+                    if (client.retryTimes<client.maxRetryTimes) {
+                        //检查网络状况。如果连接过期、就重新连接。
+                        if (client.exception) {
+                            retryConnect();
+                        }
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        //如果尝试5次连接均失败。则停止尝试连接网络。并通知用户
+
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }).start();
     }
 
+    private static void netOn(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                retryConnect();
+            }
+        }).start();
+    }
+
+    public static Client getClient(){
+        return client;
+    }
+
+
     protected void write() throws IOException {
         DataOutputStream outputStream;
-        String message=messages.get(0);
+        writeMessageCache=messages.get(0);
         messages.remove(0);
         outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-        outputStream.writeUTF(message);
+        outputStream.writeUTF(writeMessageCache);
         outputStream.flush();
     }
 
@@ -137,6 +185,9 @@ public class Client {
                 case ASK_FOR_AVAILABLE_CLASSROOM_RESULT:
                     doProcessAvailableClassroom(json);
                     break;
+                case GET_MY_COURSE_RESULT:
+                    doGetMyCourse(json);
+                    break;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -154,6 +205,7 @@ public class Client {
                         read();
                     } catch (IOException e) {
                         e.printStackTrace();
+                        handleException();
                         break;
                     }
                 }
@@ -169,6 +221,7 @@ public class Client {
                             write();
                         } catch (IOException e) {
                             e.printStackTrace();
+                            messages.add(0,writeMessageCache);
                             handleException();
                             break;
                         }
@@ -177,7 +230,6 @@ public class Client {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                        handleException();
                     }
                 }
             }
@@ -188,6 +240,11 @@ public class Client {
 
     public void addMessage(String s){
         messages.add(s);
+    }
+
+    private void notifyUnableToConnectServer(){
+        Handler handler= CurrentStateTool.getCurrentHandler();
+        handler.sendMessage(handler.obtainMessage(23333,""));
     }
 
 
@@ -284,27 +341,36 @@ public class Client {
         }
     }
 
+    private void doGetMyCourse(JSONObject json){
+        ArrayList<TimeTableCourse> arrayList=new ArrayList<>();
+        try {
+            int num=json.getInt("num");
+            for (int i=0;i<num;i++){
+                TimeTableCourse t=JsonUtil.getTimeTableCourse(json.getJSONObject(""+i));
+                arrayList.add(t);
+            }
+            LocalCourse.courses=arrayList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     private void handleException(){
-        if (exception)
-            return;
         exception=true;
-        client=new Client();
     }
 
-    private void retryConnect(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    socket = new Socket(IP_ADDR, PORT);
-                    startWorking();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    netCannotConnect=true;
-                }
-            }
-        }).start();
+    public static void retryConnect(){
+        try {
+            client.socket = new Socket(IP_ADDR, PORT);
+            client.startWorking();
+            client.exception=false;
+            client.retryTimes=0;
+        } catch (IOException e) {
+            client.retryTimes++;
+            client.exception=true;
+            e.printStackTrace();
+        }
     }
 }

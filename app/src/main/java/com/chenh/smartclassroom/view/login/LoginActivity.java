@@ -1,7 +1,10 @@
 package com.chenh.smartclassroom.view.login;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +15,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chenh.smartclassroom.R;
+import com.chenh.smartclassroom.model.LocalCourse;
 import com.chenh.smartclassroom.model.LocalMessage;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.util.CurrentStateTool;
 import com.chenh.smartclassroom.view.ContentActivity;
 import com.chenh.smartclassroom.view.LoadingDiaolog;
 import com.chenh.smartclassroom.vo.User;
@@ -67,14 +72,26 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
                         passwordView.setText("");
                         break;
+                    case 23333:
+                        hideLoadingDialog();
+                        ConnectivityManager connMgr = (ConnectivityManager)
+                                getSystemService(Context.CONNECTIVITY_SERVICE);
+                        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                        if (networkInfo != null && networkInfo.isConnected()) {
+                            words="服务器好像又宕机了";
+                        } else {
+                            words="请检查您的网络";
+                        }
+                        Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
                 }
             }
         };
+        CurrentStateTool.setCurrentHandler(handler);
         showLogin();
 
-        Intent intent=getIntent();
-        String s=intent.getStringExtra("auto");
-        if (s==null){
+        //如果存在这样一个auto字符串，说明此处未注销登陆后返回登陆界面。无需执行自动登陆选项。
+        String auto=getIntent().getStringExtra("auto");
+        if (auto==null) {
             autoLogin();
         }
         LocalUser.getLocalUser().giveHandler(handler);
@@ -88,14 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton= (Button) findViewById(R.id.btn_login);
         loginButton.setOnClickListener(new DoLogin());
     }
-
-    private void disableViews(){
-        userNameView.setVisibility(View.INVISIBLE);
-        passwordView.setVisibility(View.INVISIBLE);
-        loginButton.setVisibility(View.INVISIBLE);
-    }
-
-
 
     private class DoLogin implements View.OnClickListener{
         @Override

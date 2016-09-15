@@ -3,18 +3,16 @@ package com.chenh.smartclassroom.view;
 /**
  * Created by chenh on 2016/7/2.
  */
-
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.view.blog.BlogFragment;
 import com.chenh.smartclassroom.view.classroom.OpenClassroomListFragment;
+import com.chenh.smartclassroom.view.course.CourseFragment;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,20 +41,20 @@ public class ContentFragment extends Fragment {
                 fragment = new BlogFragment();
                 break;
             case 3:
-                fragment = new MyMessageFragment();
+                fragment = new CourseFragment();
                 break;
             case 4:
+                fragment = new MyMessageFragment();
+                break;
+            case 5:
                 fragment = new UserCenterFragment();
                 break;
-
             default:
                 fragment = new ContentFragment();
         }
-
-
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        //fragment.setArguments(args);
+
         return fragment;
     }
 

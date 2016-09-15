@@ -1,16 +1,21 @@
 package com.chenh.smartclassroom.view.blog;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,14 +30,18 @@ import com.chenh.smartclassroom.vo.BlogComments;
 import com.chenh.smartclassroom.vo.BlogMessage;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class BlogMessageActivity extends AppCompatActivity {
 
     public static final String SHEET_ID="sheetId";
     public static final int NOTIFY=1;
 
-    private ListView blogs;
-    private CommmentAdapter mAdpater;
+    private RecyclerView blogs;
+    private CommentAdapter mAdpater;
     private ArrayList<BlogComments> data;
 
     private Handler mHandler;
@@ -86,56 +95,37 @@ public class BlogMessageActivity extends AppCompatActivity {
         sheetId = Long.parseLong(getIntent().getStringExtra(SHEET_ID));
         blogMessage= LocalMessage.getLocalMessage().getSheet(sheetId);
 
-
         data= LocalComment.getLocalComment().getComments(sheetId);
-        mAdpater=new CommmentAdapter(data);
+        //mAdpater=new CommmentAdapter(data);
 
-        blogs = (ListView) findViewById(R.id.listView);
 
-        //blogs.setPullLoadEnable(true);
+        // Lookup the recyclerview in activity layout
+        blogs = (RecyclerView) findViewById(R.id.rvItems);
+        // Create adapter passing in the sample user data
+        mAdpater = new CommentAdapter(this, data);
+        // Attach the adapter to the recyclerview to populate items
         blogs.setAdapter(mAdpater);
-        blogs.setEmptyView(findViewById(R.id.emptyView));
+        // Set layout manager to position the items
+        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+        blogs.setLayoutManager(layoutManager);
+        // Add the scroll listener
+        blogs.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                customLoadMoreDataFromApi(page);
+            }
+        });
+
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+        blogs.addItemDecoration(itemDecoration);
+
+        //blogs.setItemAnimator(new SlideInUpAnimator());
+        // That's all!
 
         setRawMessage();
-    }
-
-
-
-
-
-    class CommmentAdapter extends ArrayAdapter<BlogComments> {
-
-        public CommmentAdapter(ArrayList<BlogComments> items) {
-            super(BlogMessageActivity.this, 0, items);
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            //如果没有，就inflate一个
-            if (convertView==null)
-                convertView=getLayoutInflater().inflate(R.layout.list_item_blog_comment,null);
-            BlogComments blogComments=data.get(position);
-
-
-            ImageView head=(ImageView)convertView.findViewById(R.id.head);
-            head.setImageResource(HeadUtil.getHeadId(blogComments.author.id));
-
-            TextView nameView= (TextView) convertView.findViewById(R.id.nick_name);
-            nameView.setText(blogComments.author.nickName);
-
-            TextView mottoView= (TextView) convertView.findViewById(R.id.motto);
-            mottoView.setText(blogComments.author.motto);
-
-            TextView contextView= (TextView) convertView.findViewById(R.id.text);
-            contextView.setText(blogComments.text);
-
-            TextView floorView= (TextView) convertView.findViewById(R.id.floor);
-            floorView.setText((position+1)+"楼");
-
-            TextView timeView=(TextView)convertView.findViewById(R.id.send_time);
-            timeView.setText(TimeUtil.getTotalDate(blogComments.sendTime));
-
-            return convertView;
-        }
     }
 
 
@@ -171,6 +161,128 @@ public class BlogMessageActivity extends AppCompatActivity {
 
     public long getSheetId(){
         return sheetId;
+    }
+
+
+    // Append more data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void customLoadMoreDataFromApi(int page) {
+        // Send an API request to retrieve appropriate data using the offset value as a parameter.
+        //  --> Deserialize API response and then construct new objects to append to the adapter
+        //  --> Notify the adapter of the changes
+    }
+
+
+    // Create the basic adapter extending from RecyclerView.Adapter
+    // Note that we specify the custom ViewHolder which gives us access to our views
+    private class CommentAdapter extends
+            RecyclerView.Adapter<CommentAdapter.ViewHolder> {
+
+        // Provide a direct reference to each of the views within a data item
+        // Used to cache the views within the item layout for fast access
+        class ViewHolder extends RecyclerView.ViewHolder {
+            // Your holder should contain a member variable
+            // for any view that will be set as you render a row
+
+            public ImageView head;
+
+            public TextView nameView;
+
+            public TextView mottoView;
+
+            public TextView contextView;
+
+            public TextView floorView;
+
+            public TextView timeView;
+
+            // We also create a constructor that accepts the entire item row
+            // and does the view lookups to find each subview
+            public ViewHolder(View itemView) {
+                // Stores the itemView in a public final member variable that can be used
+                // to access the context from any ViewHolder instance.
+                super(itemView);
+
+                head=(ImageView) itemView.findViewById(R.id.head);
+
+                nameView= (TextView) itemView.findViewById(R.id.nick_name);
+
+                mottoView= (TextView) itemView.findViewById(R.id.motto);
+
+                contextView= (TextView) itemView.findViewById(R.id.text);
+
+                floorView= (TextView) itemView.findViewById(R.id.floor);
+
+                timeView=(TextView) itemView.findViewById(R.id.send_time);
+
+
+            }
+        }
+
+
+        // Store a member variable for the contacts
+        private List<BlogComments> mContacts;
+        // Store the context for easy access
+        private Context mContext;
+
+        // Pass in the contact array into the constructor
+        public CommentAdapter(Context context, List<BlogComments> contacts) {
+            mContacts = contacts;
+            mContext = context;
+        }
+
+        // Easy access to the context object in the recyclerview
+        private Context getContext() {
+            return mContext;
+        }
+
+        // Usually involves inflating a layout from XML and returning the holder
+        @Override
+        public CommentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            Context context = parent.getContext();
+            LayoutInflater inflater = LayoutInflater.from(context);
+
+            // Inflate the custom layout
+            View contactView = inflater.inflate(R.layout.list_item_blog_comment, parent, false);
+
+            // Return a new holder instance
+            ViewHolder viewHolder = new ViewHolder(contactView);
+            return viewHolder;
+        }
+
+        // Involves populating data into the item through holder
+        @Override
+        public void onBindViewHolder(CommentAdapter.ViewHolder viewHolder, int position) {
+            // Get the data model based on position
+            BlogComments blogComments = mContacts.get(position);
+
+            // Set item views based on your views and data model
+            ImageView head=viewHolder.head;
+            head.setImageResource(HeadUtil.getHeadId(blogComments.author.id));
+
+            TextView nameView= viewHolder.nameView;
+            nameView.setText(blogComments.author.nickName);
+
+            TextView mottoView= viewHolder.mottoView;
+            mottoView.setText(blogComments.author.motto);
+
+            TextView contextView= viewHolder.contextView;
+            contextView.setText(blogComments.text);
+
+            TextView floorView= viewHolder.floorView;
+            floorView.setText((position+1)+"楼");
+
+            TextView timeView=viewHolder.timeView;
+            timeView.setText(TimeUtil.getTotalDate(blogComments.sendTime));
+        }
+
+        // Returns the total count of items in the list
+        @Override
+        public int getItemCount() {
+            return mContacts.size();
+        }
+
+
     }
 
 }

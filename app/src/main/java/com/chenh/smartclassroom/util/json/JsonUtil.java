@@ -5,6 +5,7 @@ import com.chenh.smartclassroom.vo.AttitudeVO;
 import com.chenh.smartclassroom.vo.BlogComments;
 import com.chenh.smartclassroom.vo.BlogMessage;
 import com.chenh.smartclassroom.vo.Classroom;
+import com.chenh.smartclassroom.vo.TimeTableCourse;
 import com.chenh.smartclassroom.vo.User;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -127,5 +128,32 @@ public class JsonUtil {
         }
         return null;
 
+    }
+
+    /**
+     *
+     * @param json
+     * @return
+     */
+    public static TimeTableCourse getTimeTableCourse(JSONObject json){
+        TimeTableCourse timeTableCourse=new TimeTableCourse();
+        try {
+           // timeTableCourse.userKey=json.getString("userKey");
+           // timeTableCourse.term=json.getString("term");
+            timeTableCourse.courseClassroom=json.getString("courseClassroom");
+            timeTableCourse.courseDate=json.getString("courseDate");
+            timeTableCourse.courseName=json.getString("courseName");
+            timeTableCourse.courseTeacher=json.getString("courseTeacher");
+            timeTableCourse.courseType=json.getString("courseType");
+           // timeTableCourse.note=json.getString("note");
+            timeTableCourse.campus=json.getString("campus");
+            timeTableCourse.startSection=json.getInt("startSection");
+            timeTableCourse.lastSection=json.getInt("lastSection");
+            timeTableCourse.week=json.getInt("week");
+            return timeTableCourse;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
