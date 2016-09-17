@@ -14,6 +14,7 @@ import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalMessage;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.HeadUtil;
 import com.chenh.smartclassroom.util.TimeUtil;
 import com.chenh.smartclassroom.view.ContentFragment;
@@ -171,19 +172,19 @@ public class BlogFragment extends ContentFragment {
                     JSONObject jsonObject=new JSONObject();
                     try {
                         if (blogMessage.isLike!=0){
-                            jsonObject.put("op", Client.CANCEL_BLOG_MESSAGE);
+                            jsonObject.put("op", NetController.CANCEL_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("id",blogMessage.isLike);
                             like.setImageResource(R.drawable.ic_love_b);
                         }else {
-                            jsonObject.put("op", Client.LIKE_BLOG_MESSAGE);
+                            jsonObject.put("op", NetController.LIKE_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("userId", LocalUser.getLocalUser().getUserId());
                             jsonObject.put("attitude",true);
                             like.setImageResource(R.drawable.ic_love_y);
                         }
                         String message=jsonObject.toString();
-                        Client.getClient().addMessage(message);
+                        NetController.getNetController().addTask(message);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -205,19 +206,19 @@ public class BlogFragment extends ContentFragment {
                     JSONObject jsonObject=new JSONObject();
                     try {
                         if (blogMessage.isDislike!=0){
-                            jsonObject.put("op", Client.CANCEL_BLOG_MESSAGE);
+                            jsonObject.put("op", NetController.CANCEL_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("id",blogMessage.isDislike);
                             dislike.setImageResource(R.drawable.ic_dislike_b);
                         }else {
-                            jsonObject.put("op", Client.LIKE_BLOG_MESSAGE);
+                            jsonObject.put("op", NetController.LIKE_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("userId",LocalUser.getLocalUser().getUserId());
                             jsonObject.put("attitude",false);
                             dislike.setImageResource(R.drawable.ic_dislike_y);
                         }
                         String message=jsonObject.toString();
-                        Client.getClient().addMessage(message);
+                        NetController.getNetController().addTask(message);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

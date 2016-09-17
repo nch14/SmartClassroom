@@ -3,10 +3,10 @@ package com.chenh.smartclassroom.model;
 import android.os.Handler;
 
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.view.blog.BlogFragment;
 import com.chenh.smartclassroom.vo.AttitudeVO;
 import com.chenh.smartclassroom.vo.BlogMessage;
-import com.chenh.smartclassroom.vo.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,8 +14,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 
 /**
  * Created by chenh on 2016/7/27.
@@ -96,11 +94,11 @@ public class LocalMessage {
     public void loadMore() {
         JSONObject json = new JSONObject();
         try {
-            json.put("op", Client.LOAD_BLOG_MESSAGE);
+            json.put("op", NetController.LOAD_BLOG_MESSAGE);
             json.put("sinceId", -1);
             json.put("maxId", sinceId);
             json.put("items", items);
-            Client.getClient().addMessage(json.toString());
+            NetController.getNetController().addTask(json.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -109,11 +107,11 @@ public class LocalMessage {
     public void refresh(){
         JSONObject json = new JSONObject();
         try {
-            json.put("op", Client.LOAD_BLOG_MESSAGE);
+            json.put("op", NetController.LOAD_BLOG_MESSAGE);
             json.put("sinceId", maxId);
             json.put("maxId", -1);
             json.put("items", items);
-            Client.getClient().addMessage(json.toString());
+            NetController.getNetController().addTask(json.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

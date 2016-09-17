@@ -3,7 +3,6 @@ package com.chenh.smartclassroom.view.course;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalCourse;
 import com.chenh.smartclassroom.util.ColorUtils;
 import com.chenh.smartclassroom.view.ContentFragment;
-import com.chenh.smartclassroom.view.CornerTextView;
 import com.chenh.smartclassroom.vo.TimeTableCourse;
 
 

@@ -1,4 +1,4 @@
-package com.chenh.smartclassroom.view;
+package com.chenh.smartclassroom.view.course;
 
 import android.content.Context;
 import android.graphics.Canvas;

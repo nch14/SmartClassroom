@@ -15,14 +15,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chenh.smartclassroom.R;
-import com.chenh.smartclassroom.model.LocalCourse;
 import com.chenh.smartclassroom.model.LocalMessage;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.CurrentStateTool;
 import com.chenh.smartclassroom.view.ContentActivity;
 import com.chenh.smartclassroom.view.LoadingDiaolog;
-import com.chenh.smartclassroom.vo.User;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -83,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                             words="请检查您的网络";
                         }
                         Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
         };
@@ -168,10 +168,10 @@ public class LoginActivity extends AppCompatActivity {
         showLoadingDialog();
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put("op",Client.LOGIN);
+            jsonObject.put("op", NetController.LOGIN);
             jsonObject.put("id",userNameView.getText().toString());
             jsonObject.put("password",passwordView.getText().toString());
-            Client.getClient().addMessage(jsonObject.toString());
+            NetController.getNetController().addTask(jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

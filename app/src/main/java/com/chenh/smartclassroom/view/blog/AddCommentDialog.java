@@ -6,23 +6,19 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Switch;
 
 import com.chenh.smartclassroom.R;
-import com.chenh.smartclassroom.model.LocalComment;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.TimeUtil;
-import com.chenh.smartclassroom.vo.BlogComments;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by chenh on 2016/8/2.
@@ -44,7 +40,7 @@ public class AddCommentDialog extends DialogFragment {
                     //评论
                     JSONObject jsonObject=new JSONObject();
                     try {
-                        jsonObject.put("op", Client.COMMENT_BLOG);
+                        jsonObject.put("op", NetController.COMMENT_BLOG);
                         if (aSwitch.isChecked()){
                             jsonObject.put("userId", "000000000");
                         }else {
@@ -55,7 +51,7 @@ public class AddCommentDialog extends DialogFragment {
                         jsonObject.put("sheetId",sheetId);
                         jsonObject.put("sendTime", TimeUtil.getTime(new Date()));
                         String  message=jsonObject.toString();
-                        Client.getClient().addMessage(message);
+                        NetController.getNetController().addTask(message);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -17,9 +16,8 @@ import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalMessage;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.TimeUtil;
-import com.chenh.smartclassroom.util.json.JsonUtil;
-import com.chenh.smartclassroom.view.LoadingDiaolog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,12 +45,6 @@ public class SendBlogActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-      /*  //透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //透明导航栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);*/
-
 
         content= (EditText) findViewById(R.id.content);
 
@@ -93,7 +85,7 @@ public class SendBlogActivity extends AppCompatActivity {
                 contentText.replace("#","");
                 JSONObject json=new JSONObject();
                 try {
-                    json.put("op", Client.CREATE_BLOG_MESSAGE);
+                    json.put("op", NetController.CREATE_BLOG_MESSAGE);
                     json.put("text",contentText);
                     json.put("sendTime", TimeUtil.getTime(new Date()));
                     json.put("tag",topic);
@@ -103,7 +95,7 @@ public class SendBlogActivity extends AppCompatActivity {
                     }else {
                         json.put("author", LocalUser.getLocalUser().getUserId());
                     }
-                    Client.getClient().addMessage(json.toString());
+                    NetController.getNetController().addTask(json.toString());
                     Toast.makeText(SendBlogActivity.this,"已发布",Toast.LENGTH_SHORT).show();
                     finish();
                 } catch (JSONException e) {
@@ -127,11 +119,5 @@ public class SendBlogActivity extends AppCompatActivity {
         orignal= orignal.replace("#","");
         content.setText("#"+s+"#"+orignal);
         topic=s;
-/*        if (content.getText()==null){
-            content.setText("#"+s+"#");
-        }else {
-
-        }*/
-
     }
 }

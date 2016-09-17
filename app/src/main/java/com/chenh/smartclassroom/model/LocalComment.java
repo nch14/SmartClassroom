@@ -3,6 +3,7 @@ package com.chenh.smartclassroom.model;
 import android.os.Handler;
 
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.view.blog.BlogMessageActivity;
 import com.chenh.smartclassroom.vo.BlogComments;
 import com.chenh.smartclassroom.vo.User;
@@ -79,10 +80,10 @@ public class LocalComment {
     private void requestComments(long sheetId){
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put("op", Client.REQUEST_BLOG_COMMENT);
+            jsonObject.put("op", NetController.REQUEST_BLOG_COMMENT);
             jsonObject.put("sheetId",sheetId);
             String message=jsonObject.toString();
-            Client.getClient().addMessage(message);
+            NetController.getNetController().addTask(message);
         } catch (JSONException e) {
             e.printStackTrace();
         }

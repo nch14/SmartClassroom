@@ -17,6 +17,7 @@ import com.chenh.smartclassroom.model.LocalClassroom;
 import com.chenh.smartclassroom.model.LocalCourse;
 import com.chenh.smartclassroom.model.LocalMessage;
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.CurrentStateTool;
 import com.chenh.smartclassroom.view.login.LoginActivity;
 
@@ -40,8 +41,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 int what=msg.what;
-                String words= (String) msg.obj;
-
+                String words;
                 switch (what){
                     case 23333:
                         ConnectivityManager connMgr = (ConnectivityManager)
@@ -58,9 +58,8 @@ public class WelcomeActivity extends AppCompatActivity {
         };
         CurrentStateTool.setCurrentHandler(mHandler);
 
-        Client.netControl();
-        LocalCourse.getCourse();
 
+        systemInit();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,5 +76,13 @@ public class WelcomeActivity extends AppCompatActivity {
                 WelcomeActivity.this.finish();
             }
         }).start();
+    }
+
+
+    private void systemInit(){
+        //打开网络，连接服务器
+        NetController.createNetController();
+        //提前获取课表
+        LocalCourse.getCourse();
     }
 }

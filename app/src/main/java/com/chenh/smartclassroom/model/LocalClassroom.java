@@ -3,6 +3,7 @@ package com.chenh.smartclassroom.model;
 import android.os.Handler;
 
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.view.classroom.OpenClassroomListFragment;
 import com.chenh.smartclassroom.vo.Classroom;
 
@@ -10,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * 本地的教室模型
@@ -70,9 +70,9 @@ public class LocalClassroom {
                 while (true){
                     JSONObject jsonObject=new JSONObject();
                     try {
-                        jsonObject.put("op", Client.SHOW_OPEN_CLASSES);
+                        jsonObject.put("op", NetController.SHOW_OPEN_CLASSES);
                         String message= jsonObject.toString();
-                        Client.getClient().addMessage(message);
+                        NetController.getNetController().addTask(message);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

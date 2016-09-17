@@ -25,8 +25,7 @@ import java.util.ArrayList;
 public class ClientCallBackProcess {
 
 
-
-    private void loginCallBack(JSONObject json, boolean success){
+    public static void loginCallBack(JSONObject json, boolean success){
         if (success){
             User user= JsonUtil.getUser(json);
             LocalUser.getLocalUser().loginCallBack(user);
@@ -41,7 +40,7 @@ public class ClientCallBackProcess {
         }
     }
 
-    private void doOpenClass(JSONObject json){
+    public static void doOpenClass(JSONObject json){
 
         ArrayList<Classroom> classrooms=new ArrayList<>();
         try {
@@ -58,7 +57,7 @@ public class ClientCallBackProcess {
 
     }
 
-    private void doLoadBlogMessage(JSONObject json){
+    public static void doLoadBlogMessage(JSONObject json){
 
         ArrayList<BlogMessage> blogMessages =new ArrayList<>();
         try {
@@ -73,7 +72,7 @@ public class ClientCallBackProcess {
         }
     }
 
-    private void doAttitudeResult(JSONObject json){
+    public static void doAttitudeResult(JSONObject json){
         ArrayList<AttitudeVO> attitudeVOs =new ArrayList<>();
         try {
             int num=json.getInt("num");
@@ -88,7 +87,7 @@ public class ClientCallBackProcess {
         }
     }
 
-    private void doLoadBlogComment(JSONObject json){
+    public static void doLoadBlogComment(JSONObject json){
         ArrayList<BlogComments> blogCommentses =new ArrayList<>();
         try {
             long sheetId=json.getLong("sheetId");
@@ -103,7 +102,7 @@ public class ClientCallBackProcess {
         }
     }
 
-    private void doProcessAvailableClassroom(JSONObject json){
+    public static void doProcessAvailableClassroom(JSONObject json){
         ArrayList<String> arrayList=new ArrayList<>();
         try {
             int num=json.getInt("num");
@@ -117,7 +116,7 @@ public class ClientCallBackProcess {
         }
     }
 
-    private void doGetMyCourse(JSONObject json){
+    public static void doGetMyCourse(JSONObject json){
         ArrayList<TimeTableCourse> arrayList=new ArrayList<>();
         try {
             int num=json.getInt("num");

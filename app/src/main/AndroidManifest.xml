@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -57,6 +58,11 @@
         <activity
             android:name=".view.UserInfoActivity"
             android:label="个人信息"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".view.course.CourseManageActivity"
+            android:label="设置"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

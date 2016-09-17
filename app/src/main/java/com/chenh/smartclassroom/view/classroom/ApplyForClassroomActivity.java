@@ -1,8 +1,6 @@
 package com.chenh.smartclassroom.view.classroom;
 
-import android.app.Dialog;
 import android.app.FragmentManager;
-import android.app.TimePickerDialog;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -21,12 +18,9 @@ import android.widget.Toast;
 
 import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalAvailableClassroom;
-import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.TimeUtil;
-import com.chenh.smartclassroom.view.LoadingDiaolog;
-import com.chenh.smartclassroom.view.listView.view.WaterDropListView;
-import com.chenh.smartclassroom.vo.BlogMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -206,11 +200,11 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
             } else {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("op", Client.ASK_FOR_AVAILABLE_CLASSROOM);
+                    jsonObject.put("op", NetController.ASK_FOR_AVAILABLE_CLASSROOM);
                     jsonObject.put("startTime", TimeUtil.getTime(start));
                     jsonObject.put("endTime", TimeUtil.getTime(end));
                     String message = jsonObject.toString();
-                    Client.getClient().addMessage(message);
+                    NetController.getNetController().addTask(message);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

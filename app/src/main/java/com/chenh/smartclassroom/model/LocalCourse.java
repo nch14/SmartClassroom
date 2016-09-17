@@ -3,6 +3,7 @@ package com.chenh.smartclassroom.model;
 import android.os.Handler;
 
 import com.chenh.smartclassroom.net.Client;
+import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.vo.TimeTableCourse;
 
 import org.json.JSONException;
@@ -22,9 +23,9 @@ public class LocalCourse {
     public static void getCourse(){
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put("op", Client.GET_MY_COURSE);
+            jsonObject.put("op", NetController.GET_MY_COURSE);
             String message= jsonObject.toString();
-            Client.getClient().addMessage(message);
+            NetController.getNetController().addTask(message);
         } catch (JSONException e) {
             e.printStackTrace();
         }
