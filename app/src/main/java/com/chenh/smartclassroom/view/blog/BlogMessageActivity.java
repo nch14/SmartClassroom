@@ -131,7 +131,8 @@ public class BlogMessageActivity extends AppCompatActivity {
 
     private void setRawMessage(){
         ImageView head=(ImageView)findViewById(R.id.head);
-        head.setImageResource(HeadUtil.getHeadId(blogMessage.author.id));
+        HeadUtil.setHeadView(head,blogMessage.author.id);
+       // head.setImageResource(HeadUtil.getHeadId(blogMessage.author.id));
 
         TextView tagView= (TextView) findViewById(R.id.tag);
         tagView.setText("标签："+blogMessage.tag);
@@ -258,7 +259,8 @@ public class BlogMessageActivity extends AppCompatActivity {
 
             // Set item views based on your views and data model
             ImageView head=viewHolder.head;
-            head.setImageResource(HeadUtil.getHeadId(blogComments.author.id));
+            HeadUtil.setHeadView(head,blogComments.author.id);
+            //head.setImageResource(HeadUtil.getHeadId(blogComments.author.id));
 
             TextView nameView= viewHolder.nameView;
             nameView.setText(blogComments.author.nickName);

@@ -3,6 +3,8 @@ package com.chenh.smartclassroom.view.course;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalCourse;
+import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.util.ColorUtils;
 import com.chenh.smartclassroom.view.ContentFragment;
 import com.chenh.smartclassroom.vo.TimeTableCourse;
@@ -37,6 +40,8 @@ public class CourseFragment extends ContentFragment {
 
     List<LinearLayout> mWeekViews;
 
+    private Handler mHandler;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_course, container, false);
@@ -55,10 +60,28 @@ public class CourseFragment extends ContentFragment {
 
         itemHeight=getActivity().getResources().getDimensionPixelSize(R.dimen.sectionHeight);
 
+        mHandler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                int what=msg.what;
+                switch (what){
+                    case 1:
+                        initWeekCourseView();
+                }
+            }
+        };
+
+        if (!LocalUser.getLocalUser().getUser().courseEnabled) {
+            LocalCourse.courses = new ArrayList<>();
+        }else if (LocalCourse.courses==null){
+            LocalCourse.courses = new ArrayList<>();
+            LocalCourse.getCourse(mHandler);
+
+        }else if (LocalUser.getLocalUser().getUser().courseEnabled&&LocalCourse.courses!=null){
+            initWeekCourseView();
+        }
         initWeekNameView();
         initSectionView(11);
-        initWeekCourseView();
-
         return rootView;
     }
 
@@ -160,7 +183,7 @@ public class CourseFragment extends ContentFragment {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showToast("由于服务器端的调整，本页面功能暂停使用。我们承诺提供一个更好用的课程表与课程管理功能。请静待更新");
+                    showToast("即将支持查看更多信息。预计在0.3版本中推出");
                 }
             });
         }

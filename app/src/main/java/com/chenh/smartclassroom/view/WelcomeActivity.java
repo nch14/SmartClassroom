@@ -82,7 +82,5 @@ public class WelcomeActivity extends AppCompatActivity {
     private void systemInit(){
         //打开网络，连接服务器
         NetController.createNetController();
-        //提前获取课表
-        LocalCourse.getCourse();
     }
 }

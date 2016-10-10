@@ -36,7 +36,20 @@ public class LocalClassroom {
 
     private LocalClassroom(){
         mClassrooms=new ArrayList<>();
-
+        Classroom c=new Classroom();
+        c.currentNumOfStudents=16;
+        c.humidity=""+30;
+        c.name="仙Ⅱ101";
+        c.temperature="26℃";
+        c.state=Classroom.OPEN;
+        mClassrooms.add(c);
+        c=new Classroom();
+        c.currentNumOfStudents=4;
+        c.humidity=""+38;
+        c.name="仙Ⅱ102";
+        c.temperature="22℃";
+        c.state=Classroom.OPEN;
+        mClassrooms.add(c);
     }
 
     /**
@@ -55,6 +68,7 @@ public class LocalClassroom {
     }
 
     public ArrayList<Classroom> getClassrooms(){
+        //requestRefresh();
         return mClassrooms;
     }
 

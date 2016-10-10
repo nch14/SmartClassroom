@@ -132,7 +132,8 @@ public class BlogFragment extends ContentFragment {
 
 
             ImageView head=(ImageView)convertView.findViewById(R.id.head);
-            head.setImageResource(HeadUtil.getHeadId(blogMessage.author.id));
+            HeadUtil.setHeadView(head,blogMessage.author.id);
+           // head.setImageResource(HeadUtil.getHeadId(blogMessage.author.id));
             head.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -175,12 +176,16 @@ public class BlogFragment extends ContentFragment {
                             jsonObject.put("op", NetController.CANCEL_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("id",blogMessage.isLike);
+
+                            blogMessage.isLike=0;
                             like.setImageResource(R.drawable.ic_love_b);
                         }else {
                             jsonObject.put("op", NetController.LIKE_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("userId", LocalUser.getLocalUser().getUserId());
                             jsonObject.put("attitude",true);
+
+                            blogMessage.isLike=1;
                             like.setImageResource(R.drawable.ic_love_y);
                         }
                         String message=jsonObject.toString();
@@ -209,12 +214,15 @@ public class BlogFragment extends ContentFragment {
                             jsonObject.put("op", NetController.CANCEL_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("id",blogMessage.isDislike);
+
+                            blogMessage.isDislike=0;
                             dislike.setImageResource(R.drawable.ic_dislike_b);
                         }else {
                             jsonObject.put("op", NetController.LIKE_BLOG_MESSAGE);
                             jsonObject.put("sheetId",blogMessage.id);
                             jsonObject.put("userId",LocalUser.getLocalUser().getUserId());
                             jsonObject.put("attitude",false);
+                            blogMessage.isDislike=1;
                             dislike.setImageResource(R.drawable.ic_dislike_y);
                         }
                         String message=jsonObject.toString();

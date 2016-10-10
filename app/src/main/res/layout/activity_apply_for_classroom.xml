@@ -166,22 +166,38 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="请选择教室"
+                        android:text="请选择教室类型"
                         android:id="@+id/textView5"
                         android:layout_weight="1" />
 
-                    <TextView
+                    <RadioGroup
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView6"
-                        android:layout_marginRight="12dp" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="小教室"
+                            android:id="@+id/radioButton2" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="普通教室"
+                            android:id="@+id/radioButton3" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="大教室"
+                            android:id="@+id/radioButton" />
+                    </RadioGroup>
+
+
                 </LinearLayout>
 
-                <ListView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/listView"
-                    android:layout_weight="1" />
+
             </LinearLayout>
 
 

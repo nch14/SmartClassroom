@@ -18,4 +18,20 @@
         android:id="@+id/textView18"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="并将支持聊天功能"
+        android:id="@+id/textView17"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="预计在v0.5版本中推出"
+        android:id="@+id/textView8"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp" />
 </LinearLayout>

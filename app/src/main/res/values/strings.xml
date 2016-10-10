@@ -28,5 +28,9 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="title_activity_one_line_fill">OneLineFillActivity</string>
+
+    <string name="take_photo_now">拍照</string>
+    <string name="choose_from_glary">从相册选取</string>
 
 </resources>

@@ -36,15 +36,13 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
     private TextView startTimeView;
     private TextView endTimeView;
 
-    private TextView classroomView;
-
     private boolean setStart;
     private boolean setEnd;
 
     private Handler mHandler;
-    private ListView listView;
+  /*  private ListView listView;
     private ArrayAdapter mAdpater;
-    private ArrayList<String> data;
+    private ArrayList<String> data;*/
 
     public static final int START_TIME = 1;
     public static final int END_TIME = 2;
@@ -74,7 +72,7 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
 
                 switch (what) {
                     case LOAD_CLASSROOM_FINISHED:
-                        mAdpater.notifyDataSetChanged();
+                        //mAdpater.notifyDataSetChanged();
                         break;
                 }
             }
@@ -85,9 +83,7 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
         //透明导航栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);*/
 
-        classroomView= (TextView) findViewById(R.id.textView6);
-
-        LocalAvailableClassroom.getLocalClassroom().addHandler(mHandler);
+/*        LocalAvailableClassroom.getLocalClassroom().addHandler(mHandler);
         data = LocalAvailableClassroom.getLocalClassroom().getClassroom();
         listView = (ListView) findViewById(R.id.listView);
         mAdpater = new ArrayAdapter(this, android.R.layout.simple_list_item_1, data);
@@ -96,9 +92,8 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String s=data.get(i);
-                classroomView.setText(s);
             }
-        });
+        });*/
 
 
         startTime = (ImageView) findViewById(R.id.imageView_start_time);
@@ -130,7 +125,7 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_commit) {
-            Toast.makeText(ApplyForClassroomActivity.this,"请求已发出",Toast.LENGTH_SHORT).show();
+            Toast.makeText(ApplyForClassroomActivity.this,"申请已提交，请等待处理结果",Toast.LENGTH_SHORT).show();
             finish();
             return true;
         }

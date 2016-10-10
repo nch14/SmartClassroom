@@ -58,6 +58,8 @@ public class JsonUtil {
             user.username=json.getString("username");
             user.nickName=json.getString("nickName");
             user.motto=json.getString("motto");
+            user.courseEnabled=json.getBoolean("courseEnabled");
+            user.university=json.getString("university");
             return user;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -74,6 +76,8 @@ public class JsonUtil {
             json.put("username",user.username);
             json.put("nickName",user.nickName);
             json.put("motto",user.motto);
+            json.put("university",user.university);
+            json.put("courseEnabled",user.courseEnabled);
             return json;
         } catch (JSONException e) {
             e.printStackTrace();

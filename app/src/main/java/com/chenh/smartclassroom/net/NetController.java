@@ -4,6 +4,10 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.chenh.smartclassroom.util.CurrentStateTool;
+
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -32,8 +36,25 @@ public class NetController {
     public final static int ASK_FOR_AVAILABLE_CLASSROOM_RESULT=17;
     public final static int GET_MY_COURSE=1001;
     public final static int GET_MY_COURSE_RESULT=1002;
-    public static final String IP_ADDR = "ss.chenhaonee.cn";//服务器地址  这里要改成服务器的ip
-    public static final int PORT = 12346;//服务器端口号
+    public final static int GET_USER_COURSE=1101;
+    public final static int GET_USER_COURSE_RESULT=1102;
+    public final static int INIT_USER_COURSE=1201;
+    public final static int REMOVE_USER_COURSE=1202;
+    public final static int REFRESH_USER=1301;
+    public final static int FORGET_PASSWORD=1401;
+
+
+
+    public static final int PUT_HEAD = 0;
+    public static final int GET_HEAD = 1;
+    public static final int CHECK_HEAD=2;
+
+
+
+    public static final String IP_ADDR = "192.168.1.102";//服务器地址  这里要改成服务器的ip
+    public static final int APP_PORT = 12346;//服务器端口号
+
+    public static final int PIC_SERVICE_PORT=12347;//图片服务端口
 
     private int maxRetryTimes=5;
 
@@ -89,20 +110,10 @@ public class NetController {
         }).start();
     }
 
-/*    private void netOn(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                tryConnect();
-            }
-        }).start();
-    }*/
-
-
     private void tryConnect(){
         Log.e("netError","2333333333333333333333网络被重置");
         try {
-            client.setSocket(new Socket(NetController.IP_ADDR, NetController.PORT));
+            client.setSocket(new Socket(NetController.IP_ADDR, NetController.APP_PORT));
             client.startWorking();
             netState=true;
             retryTimes=0;
@@ -129,5 +140,26 @@ public class NetController {
     private void notifyUnableToConnectServer(){
         Handler handler= CurrentStateTool.getCurrentHandler();
         handler.sendMessage(handler.obtainMessage(23333,""));
+    }
+
+    /**
+     * 不允许在主线程中调用该方法！！！
+     * @param s
+     * @return
+     * @throws IOException
+     */
+    public String callPicService(String s) throws IOException {
+        Socket socket = new Socket(NetController.IP_ADDR, NetController.PIC_SERVICE_PORT);
+        DataOutputStream outputStream;
+        String writeMessageCache=s;
+        outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+        outputStream.writeUTF(writeMessageCache);
+        outputStream.flush();
+
+        DataInputStream inputStream;
+        inputStream =new DataInputStream((socket.getInputStream()));
+        String result=inputStream.readUTF();
+        socket.close();
+        return result;
     }
 }

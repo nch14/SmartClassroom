@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chenh.smartclassroom.R;
@@ -42,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button loginButton;
 
+    private TextView sendPassword;
+
     private Handler handler;
 
     private LoadingDiaolog dialog;
@@ -59,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 switch (what){
                     case LOGIN_SUCCESS:
-                        hideLoadingDialog();
+                        //hideLoadingDialog();
                         saveUser(new String[]{userNameView.getText().toString(),passwordView.getText().toString()});
                         LocalMessage.getLocalMessage().refresh();
                         Intent intent=new Intent(LoginActivity.this, ContentActivity.class);
@@ -104,6 +107,29 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton= (Button) findViewById(R.id.btn_login);
         loginButton.setOnClickListener(new DoLogin());
+
+        sendPassword = (TextView) findViewById(R.id.link_signup);
+        sendPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean idValid = checkId();
+                if (idValid){
+                    JSONObject message=new JSONObject();
+                    try {
+                        message.put("op",NetController.FORGET_PASSWORD);
+                        message.put("id",userNameView.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    NetController.getNetController().addTask(message.toString());
+
+                    Toast.makeText(LoginActivity.this,"您的密码已被发送至您的学校邮箱。请查收",Toast.LENGTH_LONG).show();
+                }else {
+                    Toast.makeText(LoginActivity.this,"你用不存在的账号骗我！我不上当！",Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
     }
 
     private class DoLogin implements View.OnClickListener{

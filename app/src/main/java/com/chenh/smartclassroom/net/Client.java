@@ -79,6 +79,8 @@ public class Client {
                 case NetController.GET_MY_COURSE_RESULT:
                     ClientCallBackProcess.doGetMyCourse(json);
                     break;
+                case NetController.GET_USER_COURSE_RESULT:
+                    ClientCallBackProcess.doGetUserCourse(json);
             }
         } catch (JSONException e) {
             e.printStackTrace();

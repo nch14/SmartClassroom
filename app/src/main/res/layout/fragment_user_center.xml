@@ -18,23 +18,19 @@
             android:layout_marginTop="25dp"
             android:layout_marginBottom="50dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我爱学习"
-            android:id="@+id/motto"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="160dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"
+        android:layout_marginTop="40dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:id="@+id/course_manage_layout"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
         android:background="#ffffff">
 
         <TextView
@@ -50,8 +46,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已启用"
-            android:id="@+id/textView8"
+            android:text="未启用"
+            android:id="@+id/course_enabled"
             android:layout_gravity="center_vertical" />
 
         <ImageView
@@ -75,13 +71,14 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:id="@+id/temp"
         android:layout_height="40dp"
         android:background="#ffffff" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="课程表"
+            android:text="窝是菜单"
             android:id="@+id/textView13"
             android:layout_marginLeft="16dp"
             android:layout_weight="1"
@@ -91,7 +88,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已启用"
+            android:text="未启用"
             android:id="@+id/textView15"
             android:layout_gravity="center_vertical" />
 
@@ -103,8 +100,119 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="16dp"
             android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/change_pwd"
+        android:layout_height="40dp"
+        android:background="#ffffff" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更改密码"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right_b"
+            android:id="@+id/version_id"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center_vertical" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/about"
+        android:layout_height="40dp"
+        android:background="#ffffff" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="团队介绍"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right_b"
+            android:id="@+id/imageView5"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/version"
+        android:layout_height="40dp"
+        android:background="#ffffff" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关于"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/version_code"
+            android:text="0.22"
+            android:layout_gravity="center_vertical"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right_b"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

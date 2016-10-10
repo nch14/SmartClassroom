@@ -124,7 +124,21 @@ public class ClientCallBackProcess {
                 TimeTableCourse t=JsonUtil.getTimeTableCourse(json.getJSONObject(""+i));
                 arrayList.add(t);
             }
-            LocalCourse.courses=arrayList;
+            LocalCourse.setCourses(arrayList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void doGetUserCourse(JSONObject json){
+        ArrayList<TimeTableCourse> arrayList=new ArrayList<>();
+        try {
+            int num=json.getInt("num");
+            for (int i=0;i<num;i++){
+                TimeTableCourse t=JsonUtil.getTimeTableCourse(json.getJSONObject(""+i));
+                arrayList.add(t);
+            }
+            LocalCourse.setCourses(arrayList);
         } catch (JSONException e) {
             e.printStackTrace();
         }

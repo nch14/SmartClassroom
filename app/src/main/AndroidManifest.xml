@@ -21,16 +21,7 @@
         tools:replace="android:icon">
         <activity
             android:name=".view.login.LoginActivity"
-            android:theme="@style/AppTheme.Red">
-
-            <!--
-                <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
+            android:theme="@style/AppTheme.Red"></activity>
         <activity
             android:name=".view.ContentActivity"
             android:label="@string/title_activity_content"
@@ -58,13 +49,25 @@
         <activity
             android:name=".view.UserInfoActivity"
             android:label="个人信息"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.course.CourseManageActivity"
             android:label="设置"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.course.TempAcitivity" />
+        <activity
+            android:name=".view.OneLineFillActivity"
+            android:label="@string/title_activity_one_line_fill"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.TeamInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.AboutActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <activity android:name=".view.HeadUpdateActivity"/>
     </application>
 
 </manifest>

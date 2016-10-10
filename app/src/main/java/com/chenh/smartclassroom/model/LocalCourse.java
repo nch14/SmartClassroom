@@ -18,17 +18,27 @@ public class LocalCourse {
 
     public static ArrayList<TimeTableCourse> courses;
 
-    private Handler mHandler;
+    private static Handler mHandler;
 
-    public static void getCourse(){
+    public static void getCourse(Handler handler){
+        mHandler=handler;
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put("op", NetController.GET_MY_COURSE);
+            jsonObject.put("op", NetController.GET_USER_COURSE);
+            jsonObject.put("id",LocalUser.getLocalUser().getUserId());
             String message= jsonObject.toString();
             NetController.getNetController().addTask(message);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    public static void setCourses(ArrayList<TimeTableCourse> cs){
+        courses=cs;
+        mHandler.sendMessage(mHandler.obtainMessage(1,"refresh"));
+
     }
 
 
