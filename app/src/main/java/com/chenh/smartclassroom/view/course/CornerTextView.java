@@ -11,8 +11,8 @@ import android.widget.TextView;
  */
 public class CornerTextView extends TextView {
 
-    private int mBgColor = 0; //背景颜色
-    private int mCornerSize = 0; //圆角大小
+    protected int mBgColor = 0; //背景颜色
+    protected int mCornerSize = 0; //圆角大小
 
     public CornerTextView(Context context, int bgColor, int cornerSize) {
         super(context);

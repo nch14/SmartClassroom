@@ -21,6 +21,15 @@ import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.CurrentStateTool;
 import com.chenh.smartclassroom.view.login.LoginActivity;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
 public class WelcomeActivity extends AppCompatActivity {
     private Handler mHandler;
     @Override
@@ -67,11 +76,31 @@ public class WelcomeActivity extends AppCompatActivity {
                 //LocalClassroom.getLocalClassroom().requestRefresh();
                 //LocalMessage.getLocalMessage();
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Intent intent=new Intent(WelcomeActivity.this, LoginActivity.class);
+
+                Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+/*                String[] s = loadUser();
+                Intent intent;
+                if (s!=null){
+                    try {
+                        new FutureTask<>(new Callable<Boolean>() {
+                            @Override
+                            public Boolean call() throws Exception {
+                                return null;
+                            }
+                        }).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    intent=new Intent(WelcomeActivity.this, ContentActivity.class);
+                }else {
+                    intent=new Intent(WelcomeActivity.this, LoginActivity.class);
+                }*/
                 startActivity(intent);
                 WelcomeActivity.this.finish();
             }
@@ -83,4 +112,21 @@ public class WelcomeActivity extends AppCompatActivity {
         //打开网络，连接服务器
         NetController.createNetController();
     }
+
+
+    private String[] loadUser(){
+        File filesDir=getFilesDir();
+        File todoFile=new File(filesDir,"user.txt");
+        ArrayList<String> items;
+        try {
+            items=new ArrayList<String>(FileUtils.readLines(todoFile));
+        }catch (IOException e){
+            items=new ArrayList<>();
+        }
+        if (items.size()!=0){
+            return new String[]{items.get(0),items.get(1)};
+        }
+        return null;
+    }
+
 }

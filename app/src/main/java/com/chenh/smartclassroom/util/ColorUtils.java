@@ -30,7 +30,7 @@ public class ColorUtils {
             case 9:
                 return Color.parseColor("#70cec7");
             default:
-                return Color.GRAY;
+                return Color.parseColor("#ffffff");
         }
     }
 }

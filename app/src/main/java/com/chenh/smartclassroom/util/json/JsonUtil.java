@@ -160,4 +160,27 @@ public class JsonUtil {
         }
         return null;
     }
+
+    public static JSONObject pack(TimeTableCourse timeTableCourse){
+        JSONObject json=new JSONObject();
+        try {
+            json.put("userKey",(timeTableCourse.userKey));
+            json.put("term",(timeTableCourse.term));
+            json.put("courseClassroom",timeTableCourse.courseClassroom);
+            json.put("courseDate",timeTableCourse.courseDate);
+            json.put("courseName",timeTableCourse.courseName);
+            json.put("courseTeacher",timeTableCourse.courseTeacher);
+            json.put("courseType",timeTableCourse.courseType);
+            json.put("note",(timeTableCourse.note));
+            json.put("campus",timeTableCourse.campus);
+            json.put("startSection",timeTableCourse.startSection);
+            json.put("lastSection",timeTableCourse.lastSection);
+            json.put("week",timeTableCourse.week);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return json;
+    }
+
 }

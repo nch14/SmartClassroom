@@ -1,4 +1,4 @@
-package com.chenh.smartclassroom.view;
+package com.chenh.smartclassroom.view.common;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

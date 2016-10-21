@@ -1,4 +1,4 @@
-package com.chenh.smartclassroom.view;
+package com.chenh.smartclassroom.view.common;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.chenh.smartclassroom.R;
+import com.chenh.smartclassroom.view.ConfigActivity;
 
 public class OneLineFillActivity extends ConfigActivity {
-    private EditText mInputView;
+    protected EditText mInputView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_one_line_fill);

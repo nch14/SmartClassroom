@@ -16,13 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chenh.smartclassroom.R;
-import com.chenh.smartclassroom.model.LocalMessage;
 import com.chenh.smartclassroom.model.LocalUser;
-import com.chenh.smartclassroom.net.Client;
 import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.CurrentStateTool;
 import com.chenh.smartclassroom.view.ContentActivity;
-import com.chenh.smartclassroom.view.LoadingDiaolog;
+import com.chenh.smartclassroom.view.common.LoadingDiaolog;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -64,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
                     case LOGIN_SUCCESS:
                         //hideLoadingDialog();
                         saveUser(new String[]{userNameView.getText().toString(),passwordView.getText().toString()});
-                        LocalMessage.getLocalMessage().refresh();
                         Intent intent=new Intent(LoginActivity.this, ContentActivity.class);
                         startActivity(intent);
                         finish();

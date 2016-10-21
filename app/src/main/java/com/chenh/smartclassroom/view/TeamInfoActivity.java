@@ -19,7 +19,7 @@ public class TeamInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team_info);
 
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("关于");
+        toolbar.setTitle("团队介绍");
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -30,7 +30,7 @@ public class TeamInfoActivity extends AppCompatActivity {
         });
 
 
-        guessButton= (TextView) findViewById(R.id.egg_guess);
+      /*  guessButton= (TextView) findViewById(R.id.egg_guess);
         guessName= (TextView) findViewById(R.id.guess_name);
         egg= (TextView) findViewById(R.id.eggs);
 
@@ -54,7 +54,7 @@ public class TeamInfoActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
     }
 
 }

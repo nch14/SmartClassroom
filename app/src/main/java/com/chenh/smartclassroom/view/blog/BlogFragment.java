@@ -1,248 +1,192 @@
 package com.chenh.smartclassroom.view.blog;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.chenh.smartclassroom.R;
-import com.chenh.smartclassroom.model.LocalMessage;
-import com.chenh.smartclassroom.model.LocalUser;
-import com.chenh.smartclassroom.net.Client;
-import com.chenh.smartclassroom.net.NetController;
-import com.chenh.smartclassroom.util.HeadUtil;
-import com.chenh.smartclassroom.util.TimeUtil;
-import com.chenh.smartclassroom.view.ContentFragment;
-import com.chenh.smartclassroom.view.LoadingDiaolog;
-import com.chenh.smartclassroom.view.UserInfoActivity;
-import com.chenh.smartclassroom.view.listView.view.WaterDropListView;
-import com.chenh.smartclassroom.vo.BlogMessage;
+import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.chenh.smartclassroom.R;
+import com.chenh.smartclassroom.util.HeadUtil;
+import com.chenh.smartclassroom.view.ContentFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chenh on 2016/8/1.
  */
 public class BlogFragment extends ContentFragment {
 
-    public static final int LOAD_MORE=1;
-    public static final int LOAD_MORE_FINISHED=2;
+    private ImageView mNotificationBlogModule;
 
-    public static final int REFRESH=3;
-    public static final int REFRESH_FINISHED=4;
+    private ImageView mFindMyCardBlogModule;
 
-    public static final int LOAD_FINISHED=5;
+    private RecyclerView mBlogList;
 
-    public static final int NOTIFY=6;
+    private BlockAdapter mAdpater;
 
-    private WaterDropListView blogs;
-    private BlogAdapter mAdpater;
-    private ArrayList<BlogMessage> data;
 
-    private Handler mHandler;
-
-    private boolean loadMore;
-    private boolean refresh;
-
-    LoadingDiaolog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blog, container, false);
 
-        mHandler=new Handler(){
+
+        mNotificationBlogModule = (ImageView) rootView.findViewById(R.id.notification_block);
+
+        mFindMyCardBlogModule = (ImageView) rootView.findViewById(R.id.lostSomething_block);
+
+        mNotificationBlogModule.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void handleMessage(Message msg) {
-                int what=msg.what;
-                String message = msg.obj.toString();
-
-                switch (what){
-                    case LOAD_FINISHED:
-                        if (loadMore) {
-                            blogs.stopLoadMore();
-                            loadMore=false;
-                        }
-                        if (refresh){
-                            blogs.stopRefresh();
-                            refresh=false;
-                        }
-                        mAdpater.notifyDataSetChanged();
-                        break;
-                    case NOTIFY:
-                        mAdpater.notifyDataSetChanged();
-                        break;
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),BlogActivity.class);
+                intent.putExtra("title","公告通知");
+                intent.putExtra("code","公告通知");
+                startActivity(intent);
             }
-        };
-        LocalMessage.getLocalMessage().addHandler(mHandler);
+        });
 
-        data= LocalMessage.getLocalMessage().getBlogMessages();
-        mAdpater=new BlogAdapter(data);
+        mFindMyCardBlogModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),BlogActivity.class);
+                intent.putExtra("title","寻物启事");
+                intent.putExtra("code","寻物启事");
+                startActivity(intent);
+            }
+        });
 
-        blogs = (WaterDropListView) rootView.findViewById(R.id.listView);
-        blogs.setWaterDropListViewListener(new DropListViewListener());
-        blogs.setPullLoadEnable(true);
-        blogs.setAdapter(mAdpater);
+        mBlogList = (RecyclerView) rootView.findViewById(R.id.rvItems);
+        configModuleList();
 
         //showLoadingDialog();
         return rootView;
     }
 
-    private class DropListViewListener implements WaterDropListView.IWaterDropListViewListener{
 
-        @Override
-        public void onRefresh() {
-            if (!loadMore&&!refresh) {
-                refresh=true;
-                LocalMessage.getLocalMessage().refresh();
-            }
-        }
-        @Override
-        public void onLoadMore() {
-            if (!loadMore&&!refresh){
-                loadMore=true;
-                LocalMessage.getLocalMessage().loadMore();
-            }
 
-        }
+    private void configModuleList(){
+
+        List<String> data = new ArrayList<>();
+        data.add("下课聊");
+        data.add("约自习");
+        data.add("社团活动");
+        data.add("PHP是最好的语言");
+
+
+        // Create adapter passing in the sample user data
+        mAdpater = new BlockAdapter(getActivity(), data);
+        // Attach the adapter to the recyclerview to populate items
+        mBlogList.setAdapter(mAdpater);
+        // Set layout manager to position the items
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
+        mBlogList.setLayoutManager(layoutManager);
+        /*// Add the scroll listener
+        mBlogList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                customLoadMoreDataFromApi(page);
+            }
+        });*/
+
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
+        mBlogList.addItemDecoration(itemDecoration);
     }
 
 
+    // Create the basic adapter extending from RecyclerView.Adapter
+    // Note that we specify the custom ViewHolder which gives us access to our views
+     private class BlockAdapter extends
+            RecyclerView.Adapter<BlockAdapter.ViewHolder> {
+
+        // Provide a direct reference to each of the views within a data item
+        // Used to cache the views within the item layout for fast access
+        class ViewHolder extends RecyclerView.ViewHolder {
+            // Your holder should contain a member variable
+            // for any view that will be set as you render a row
+
+            public ImageView logo;
+
+            public TextView nameView;
 
 
-    class BlogAdapter extends ArrayAdapter<BlogMessage> {
+            // We also create a constructor that accepts the entire item row
+            // and does the view lookups to find each subview
+            public ViewHolder(View itemView) {
+                // Stores the itemView in a public final member variable that can be used
+                // to access the context from any ViewHolder instance.
+                super(itemView);
 
-        public BlogAdapter(ArrayList<BlogMessage> items) {
-            super(getActivity(), 0, items);
+                logo=(ImageView) itemView.findViewById(R.id.block_image);
+
+                nameView= (TextView) itemView.findViewById(R.id.block_name);
+
+
+
+            }
         }
+
+
+        // Store a member variable for the contacts
+        private List<String> mBlogs;
+        // Store the context for easy access
+        private Context mContext;
+
+        // Pass in the contact array into the constructor
+        public BlockAdapter(Context context, List<String> contacts) {
+            mBlogs = contacts;
+            mContext = context;
+        }
+
+        // Easy access to the context object in the recyclerview
+        private Context getContext() {
+            return mContext;
+        }
+
+        // Usually involves inflating a layout from XML and returning the holder
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            //如果没有，就inflate一个
-            if (convertView==null)
-                convertView=getActivity().getLayoutInflater().inflate(R.layout.list_item_blog_message,null);
-            final BlogMessage blogMessage=data.get(position);
+        public BlockAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            Context context = parent.getContext();
+            LayoutInflater inflater = LayoutInflater.from(context);
 
+            // Inflate the custom layout
+            View contactView = inflater.inflate(R.layout.list_item_block, parent, false);
 
-            ImageView head=(ImageView)convertView.findViewById(R.id.head);
-            HeadUtil.setHeadView(head,blogMessage.author.id);
-           // head.setImageResource(HeadUtil.getHeadId(blogMessage.author.id));
-            head.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent=new Intent(getActivity(), UserInfoActivity.class);
-                    intent.putExtra("user",blogMessage.author);
-                    startActivity(intent);
-                }
-            });
-
-            TextView tagView= (TextView) convertView.findViewById(R.id.tag);
-            tagView.setText("标签："+blogMessage.tag);
-
-            TextView nameView= (TextView) convertView.findViewById(R.id.nick_name);
-            nameView.setText(blogMessage.author.nickName);
-
-            TextView mottoView= (TextView) convertView.findViewById(R.id.motto);
-            mottoView.setText(blogMessage.author.motto);
-
-            TextView contextView= (TextView) convertView.findViewById(R.id.text);
-            contextView.setText(blogMessage.text);
-
-            TextView timeView=(TextView)convertView.findViewById(R.id.send_time);
-            timeView.setText(TimeUtil.getTotalDate(blogMessage.sendTime));
-
-            final ImageView like= (ImageView) convertView.findViewById(R.id.like);
-
-            if (blogMessage.isLike!=0) {
-                like.setImageResource(R.drawable.ic_love_y);
-            }
-            else {
-                like.setImageResource(R.drawable.ic_love_b);
-            }
-
-            like.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    JSONObject jsonObject=new JSONObject();
-                    try {
-                        if (blogMessage.isLike!=0){
-                            jsonObject.put("op", NetController.CANCEL_BLOG_MESSAGE);
-                            jsonObject.put("sheetId",blogMessage.id);
-                            jsonObject.put("id",blogMessage.isLike);
-
-                            blogMessage.isLike=0;
-                            like.setImageResource(R.drawable.ic_love_b);
-                        }else {
-                            jsonObject.put("op", NetController.LIKE_BLOG_MESSAGE);
-                            jsonObject.put("sheetId",blogMessage.id);
-                            jsonObject.put("userId", LocalUser.getLocalUser().getUserId());
-                            jsonObject.put("attitude",true);
-
-                            blogMessage.isLike=1;
-                            like.setImageResource(R.drawable.ic_love_y);
-                        }
-                        String message=jsonObject.toString();
-                        NetController.getNetController().addTask(message);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            });
-
-            final ImageView dislike= (ImageView) convertView.findViewById(R.id.dislike);
-            if (blogMessage.isDislike!=0) {
-                dislike.setImageResource(R.drawable.ic_dislike_y);
-            }
-            else {
-                dislike.setImageResource(R.drawable.ic_dislike_b);
-            }
-
-            dislike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    JSONObject jsonObject=new JSONObject();
-                    try {
-                        if (blogMessage.isDislike!=0){
-                            jsonObject.put("op", NetController.CANCEL_BLOG_MESSAGE);
-                            jsonObject.put("sheetId",blogMessage.id);
-                            jsonObject.put("id",blogMessage.isDislike);
-
-                            blogMessage.isDislike=0;
-                            dislike.setImageResource(R.drawable.ic_dislike_b);
-                        }else {
-                            jsonObject.put("op", NetController.LIKE_BLOG_MESSAGE);
-                            jsonObject.put("sheetId",blogMessage.id);
-                            jsonObject.put("userId",LocalUser.getLocalUser().getUserId());
-                            jsonObject.put("attitude",false);
-                            blogMessage.isDislike=1;
-                            dislike.setImageResource(R.drawable.ic_dislike_y);
-                        }
-                        String message=jsonObject.toString();
-                        NetController.getNetController().addTask(message);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            ImageView comment= (ImageView) convertView.findViewById(R.id.comment);
-            comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent=new Intent(getActivity(),BlogMessageActivity.class);
-                    intent.putExtra(BlogMessageActivity.SHEET_ID,""+blogMessage.id);
-                    startActivity(intent);
-                }
-            });
-            return convertView;
+            // Return a new holder instance
+            BlockAdapter.ViewHolder viewHolder = new BlockAdapter.ViewHolder(contactView);
+            return viewHolder;
         }
+
+        @Override
+        public void onBindViewHolder(BlockAdapter.ViewHolder holder, int position) {
+
+            // Set item views based on your views and data model
+            ImageView head=holder.logo;
+            HeadUtil.setHeadView(head,"141250096");
+
+            TextView nameView= holder.nameView;
+            nameView.setText(mBlogs.get(position));
+
+        }
+
+
+        // Returns the total count of items in the list
+        @Override
+        public int getItemCount() {
+            return mBlogs.size();
+        }
+
+
     }
-    }
+
+}

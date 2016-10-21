@@ -20,8 +20,10 @@ import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.HeadUtil;
 import com.chenh.smartclassroom.util.json.JsonUtil;
+import com.chenh.smartclassroom.view.common.OneAreaFillActivity;
+import com.chenh.smartclassroom.view.common.OneLineFillActivity;
 import com.chenh.smartclassroom.view.course.CourseManageActivity;
-import com.chenh.smartclassroom.view.course.TempAcitivity;
+import com.chenh.smartclassroom.view.common.TempAcitivity;
 import com.chenh.smartclassroom.view.login.LoginActivity;
 import com.chenh.smartclassroom.vo.User;
 
@@ -41,6 +43,7 @@ public class UserCenterFragment extends ContentFragment {
     private Button logOut;
 
     public static final int CHANGE_PASSWORD=1;
+    public static final int FEEDBACK=2;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user_center, container, false);
@@ -75,11 +78,12 @@ public class UserCenterFragment extends ContentFragment {
             }
         });
 
-        rootView.findViewById(R.id.temp).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), TempAcitivity.class);
-                startActivity(intent);
+                Intent intent=new Intent(getActivity(), OneAreaFillActivity.class);
+                intent.putExtra("ACTIVITY_NAME","意见反馈");
+                startActivityForResult(intent,FEEDBACK);
             }
         });
 
@@ -147,6 +151,9 @@ public class UserCenterFragment extends ContentFragment {
                 Intent intent=new Intent(getActivity(), LoginActivity.class);
                 intent.putExtra("auto","");
                 startActivity(intent);
+                break;
+            case FEEDBACK:
+
                 break;
         }
     }

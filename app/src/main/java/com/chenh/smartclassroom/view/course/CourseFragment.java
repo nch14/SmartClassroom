@@ -1,7 +1,9 @@
 package com.chenh.smartclassroom.view.course;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,13 +21,18 @@ import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalCourse;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.util.ColorUtils;
+import com.chenh.smartclassroom.util.Int2ZHUtil;
 import com.chenh.smartclassroom.view.ContentFragment;
 import com.chenh.smartclassroom.vo.TimeTableCourse;
 
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import static android.app.Activity.RESULT_CANCELED;
 
 /**
  * Created by chenh on 2016/9/9.
@@ -34,7 +41,7 @@ public class CourseFragment extends ContentFragment {
 
     LinearLayout weekNames;
 
-    private int itemHeight;;
+    private int itemHeight;
 
     LinearLayout sections;
 
@@ -42,11 +49,16 @@ public class CourseFragment extends ContentFragment {
 
     private Handler mHandler;
 
+    private ArrayList<Point> choosedPoints;
+    private ArrayList<EmptyTimeTextView> emptyTimeTextViews;
+
+    public static final int ADD_COURSE_OR_PLAN = 1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_course, container, false);
 
-        mWeekViews=new ArrayList<>();
+        mWeekViews = new ArrayList<>();
         mWeekViews.add((LinearLayout) rootView.findViewById(R.id.weekPanel_1));
         mWeekViews.add((LinearLayout) rootView.findViewById(R.id.weekPanel_2));
         mWeekViews.add((LinearLayout) rootView.findViewById(R.id.weekPanel_3));
@@ -55,16 +67,19 @@ public class CourseFragment extends ContentFragment {
         mWeekViews.add((LinearLayout) rootView.findViewById(R.id.weekPanel_6));
         mWeekViews.add((LinearLayout) rootView.findViewById(R.id.weekPanel_7));
 
-        sections= (LinearLayout) rootView.findViewById(R.id.sections);
-        weekNames= (LinearLayout) rootView.findViewById(R.id.weekNames);
+        sections = (LinearLayout) rootView.findViewById(R.id.sections);
+        weekNames = (LinearLayout) rootView.findViewById(R.id.weekNames);
 
-        itemHeight=getActivity().getResources().getDimensionPixelSize(R.dimen.sectionHeight);
+        choosedPoints = new ArrayList<>();
+        emptyTimeTextViews = new ArrayList<>();
 
-        mHandler=new Handler(){
+        itemHeight = getActivity().getResources().getDimensionPixelSize(R.dimen.sectionHeight);
+
+        mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                int what=msg.what;
-                switch (what){
+                int what = msg.what;
+                switch (what) {
                     case 1:
                         initWeekCourseView();
                 }
@@ -73,11 +88,11 @@ public class CourseFragment extends ContentFragment {
 
         if (!LocalUser.getLocalUser().getUser().courseEnabled) {
             LocalCourse.courses = new ArrayList<>();
-        }else if (LocalCourse.courses==null){
+        } else if (LocalCourse.courses == null) {
             LocalCourse.courses = new ArrayList<>();
             LocalCourse.getCourse(mHandler);
 
-        }else if (LocalUser.getLocalUser().getUser().courseEnabled&&LocalCourse.courses!=null){
+        } else if (LocalUser.getLocalUser().getUser().courseEnabled && LocalCourse.courses != null) {
             initWeekCourseView();
         }
         initWeekNameView();
@@ -91,7 +106,7 @@ public class CourseFragment extends ContentFragment {
     private void initWeekNameView() {
         int today = getDate();
         int week = getWeekDay();
-        int startDay=today-(week-1);
+        int startDay = today - (week - 1);
 
         for (int i = 0; i < mWeekViews.size() + 1; i++) {
             TextView tvWeekName = new TextView(getActivity());
@@ -100,7 +115,7 @@ public class CourseFragment extends ContentFragment {
 
             if (i != 0) {
                 lp.weight = 1;
-                tvWeekName.setText(startDay+"\n"+"周" + intToZH(i));
+                tvWeekName.setText(startDay + "\n" + "周" + Int2ZHUtil.intToZH(i));
                 startDay++;
                 if (i == getWeekDay()) {
                     tvWeekName.setTextColor(Color.parseColor("#FF0000"));
@@ -119,6 +134,7 @@ public class CourseFragment extends ContentFragment {
 
     /**
      * 左边节次布局，设定每天最多maxSection节课
+     *
      * @param maxSection
      */
     private void initSectionView(int maxSection) {
@@ -139,19 +155,34 @@ public class CourseFragment extends ContentFragment {
      */
     private void initWeekCourseView() {
         for (int i = 0; i < mWeekViews.size(); i++) {
-            initWeekPanel(mWeekViews.get(i), getCourses()[i]);
+            mWeekViews.get(i).removeAllViews();
+            initOneDayCourseTable(mWeekViews.get(i), getCourses()[i], i);
         }
     }
 
-    public void initWeekPanel(LinearLayout ll, List<TimeTableCourse> data) {
-
+    public void initOneDayCourseTable(LinearLayout ll, List<TimeTableCourse> data, int weekDayIndex) {
         if (ll == null || data == null || data.size() < 1)
             return;
+        int[] emptyTimeTag = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        Collections.sort(data, new Comparator<TimeTableCourse>() {
+            @Override
+            public int compare(TimeTableCourse o1, TimeTableCourse o2) {
+                return o1.startSection - o2.startSection;
+            }
+        });
+
         TimeTableCourse firstCourse = data.get(0);
         for (int i = 0; i < data.size(); i++) {
             final TimeTableCourse course = data.get(i);
             if (course.startSection == 0 || course.lastSection == 0)
                 return;
+
+            //--------------修改标志位-----------------
+            for (int courseTagCounter = course.startSection; courseTagCounter < course.startSection + course.lastSection; courseTagCounter++)
+                emptyTimeTag[courseTagCounter - 1] = 1;
+            //---------------修改完毕------------------
+
             FrameLayout frameLayout = new FrameLayout(getActivity());
 
             CornerTextView tv = new CornerTextView(getActivity(),
@@ -165,9 +196,13 @@ public class CourseFragment extends ContentFragment {
                     LinearLayout.LayoutParams.MATCH_PARENT);
 
             if (i == 0) {
-                frameLp.setMargins(0, (course.startSection - 1) * itemHeight, 0, 0);
+                for (int j = 0; j < course.startSection - 1; j++)
+                    addEmptyTimeViewToHelpInit(ll, weekDayIndex, j);
+                frameLp.setMargins(0, /*(course.startSection - 1) * itemHeight*/0, 0, 0);
             } else {
-                frameLp.setMargins(0, (course.startSection - (firstCourse.startSection + firstCourse.lastSection)) * itemHeight, 0, 0);
+                for (int j = (firstCourse.startSection + firstCourse.lastSection); j < course.startSection; j++)
+                    addEmptyTimeViewToHelpInit(ll, weekDayIndex, j);
+                frameLp.setMargins(0, /*(course.startSection - (firstCourse.startSection + firstCourse.lastSection)) * itemHeight*/0, 0, 0);
             }
             tv.setLayoutParams(tvLp);
             tv.setGravity(Gravity.CENTER);
@@ -187,47 +222,78 @@ public class CourseFragment extends ContentFragment {
                 }
             });
         }
+
+        addEmptyTimeViewAfterTheLast(emptyTimeTag, ll, weekDayIndex);
+
     }
 
+    private void addEmptyTimeViewToHelpInit(LinearLayout ll, final int weekDayIndex, final int sectionIndex) {
+        final CornerTextView tv = new EmptyTimeTextView(getActivity(),
+                ColorUtils.getCourseBgColor(100),
+                dip2px(getActivity(), 3));
 
-    /**
-     * 数字转换中文
-     */
-    public static String intToZH(int i) {
-        String[] zh = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
-        String[] unit = {"", "十", "百", "千", "万", "十", "百", "千", "亿", "十"};
+        FrameLayout emptyLayout = new FrameLayout(getActivity());
+        LinearLayout.LayoutParams emptyLayoutLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                itemHeight * 1);
+        LinearLayout.LayoutParams tvLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
 
-        String str = "";
-        StringBuffer sb = new StringBuffer(String.valueOf(i));
-        sb = sb.reverse();
-        int r = 0;
-        int l = 0;
-        for (int j = 0; j < sb.length(); j++) {
-            r = Integer.valueOf(sb.substring(j, j + 1));
-            if (j != 0)
-                l = Integer.valueOf(sb.substring(j - 1, j));
-            if (j == 0) {
-                if (r != 0 || sb.length() == 1)
-                    str = zh[r];
-                continue;
+        emptyLayoutLp.setMargins(0, 0, 0, 0);
+
+        tv.setLayoutParams(tvLp);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(12);
+        tv.setTextColor(Color.parseColor("#000000"));
+        tv.setText("");
+
+
+        emptyLayout.setLayoutParams(emptyLayoutLp);
+        emptyLayout.setPadding(2, 2, 2, 2);
+        emptyLayout.addView(tv);
+        ll.addView(emptyLayout);
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = ((EmptyTimeTextView) v).getText().toString();
+                if (s.equals("")) {
+                    ((EmptyTimeTextView) v).setText("+");
+                    choosedPoints.add(new Point(weekDayIndex, sectionIndex));
+                    emptyTimeTextViews.add((EmptyTimeTextView) v);
+                } else if (s.equals("+")) {
+                    ((EmptyTimeTextView) v).setText("");
+                    clearSingleItem(weekDayIndex, sectionIndex);
+                }
             }
-            if (j == 1 || j == 2 || j == 3 || j == 5 || j == 6 || j == 7 || j == 9) {
-                if (r != 0)
-                    str = zh[r] + unit[j] + str;
-                else if (l != 0)
-                    str = zh[r] + str;
-                continue;
+        });
+
+        tv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String s = ((EmptyTimeTextView) v).getText().toString();
+                if (s.equals(""))
+                    return false;
+                else if (s.contains("+")) {
+                    addCourseOrPlans();
+                }
+                return true;
             }
-            if (j == 4 || j == 8) {
-                str = unit[j] + str;
-                if ((l != 0 && r == 0) || r != 0)
-                    str = zh[r] + str;
-                continue;
+        });
+
+    }
+
+    private void addEmptyTimeViewAfterTheLast(int[] emptyTimeTag, LinearLayout ll, int weekDayIndex) {
+        int lastIndexOfUsed = -1;
+        for (int i = emptyTimeTag.length - 1; i >= 0; i--) {
+            if (emptyTimeTag[i] == 1) {
+                lastIndexOfUsed = i;
+                break;
             }
         }
-        if (str.equals("七"))
-            str = "日";
-        return str;
+        for (int j = lastIndexOfUsed + 1; j < emptyTimeTag.length; j++)
+            addEmptyTimeViewToHelpInit(ll, weekDayIndex, j + 1);
     }
 
 
@@ -242,36 +308,33 @@ public class CourseFragment extends ContentFragment {
         return w;
     }
 
-    private int getDate(){
-        int d = Calendar.getInstance().get(Calendar.DATE);
-        return d;
+    private int getDate() {
+        return Calendar.getInstance().get(Calendar.DATE);
     }
 
     /**
      * 当前月份
      */
     private int getMonth() {
-        int w = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        return w;
+        return Calendar.getInstance().get(Calendar.MONTH) + 1;
     }
 
-    private List<TimeTableCourse>[] getCourses(){
-        ArrayList<TimeTableCourse> localCourse= LocalCourse.courses;
-        List<TimeTableCourse> TimeTableCourses[] = new ArrayList[7];
+    private List<TimeTableCourse>[] getCourses() {
+        ArrayList<TimeTableCourse> localCourse = LocalCourse.courses;
+        List<TimeTableCourse>[] timeTableCourses = new ArrayList[7];
 
-        for (int i = 0; i < TimeTableCourses.length; i++) {
-            TimeTableCourses[i] = new ArrayList<>();
-        }
+        for (int i = 0; i < timeTableCourses.length; i++)
+            timeTableCourses[i] = new ArrayList<>();
 
-        for (TimeTableCourse t:localCourse){
-            TimeTableCourses[getNumFromCh(t.courseDate)].add(t);
-        }
 
-        return TimeTableCourses;
+        for (TimeTableCourse t : localCourse)
+            timeTableCourses[getNumFromCh(t.courseDate)].add(t);
+
+        return timeTableCourses;
     }
 
-    private int getNumFromCh(String s){
-        ArrayList<String> ch=new ArrayList<>();
+    private int getNumFromCh(String s) {
+        ArrayList<String> ch = new ArrayList<>();
         ch.add("周一");
         ch.add("周二");
         ch.add("周三");
@@ -299,4 +362,46 @@ public class CourseFragment extends ContentFragment {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
+    private void addCourseOrPlans() {
+        Intent intent = new Intent(getActivity(), CourseOrPlanActivity.class);
+        intent.putExtra("time", choosedPoints);
+        startActivityForResult(intent, ADD_COURSE_OR_PLAN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            clearRecord();
+            return;
+        }
+        clearRecord();
+        mHandler.sendMessage(mHandler.obtainMessage(1, ""));
+
+    }
+
+    /**
+     * 撤销选中
+     */
+    private void clearRecord() {
+        choosedPoints.clear();
+        for (EmptyTimeTextView emptyTimeTextView : emptyTimeTextViews) {
+            emptyTimeTextView.setText("");
+        }
+        emptyTimeTextViews.clear();
+    }
+
+    private void clearSingleItem(int x, int y) {
+        int index = -1;
+        for (Point p : choosedPoints) {
+            if (p.x == x && p.y == y) {
+                index = choosedPoints.indexOf(p);
+                break;
+            }
+        }
+        if (index != -1) {
+            choosedPoints.remove(index);
+            emptyTimeTextViews.remove(index);
+        }
+
+    }
 }

@@ -32,7 +32,6 @@ public class LocalAvailableClassroom {
         for (String s:arrayList){
             classrooms.add(s);
         }
-        mHandler.sendMessage(mHandler.obtainMessage(ApplyForClassroomActivity.LOAD_CLASSROOM_FINISHED,""));
     }
 
     public void addHandler(Handler mHandler){

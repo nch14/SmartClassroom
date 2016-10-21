@@ -68,46 +68,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:id="@+id/temp"
-        android:layout_height="40dp"
-        android:background="#ffffff" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="窝是菜单"
-            android:id="@+id/textView13"
-            android:layout_marginLeft="16dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:textColor="#000000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="未启用"
-            android:id="@+id/textView15"
-            android:layout_gravity="center_vertical" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_chevron_right_b"
-            android:id="@+id/imageView4"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_gravity="center_vertical" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/divider"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -134,6 +95,47 @@
             android:layout_marginLeft="16dp"
             android:layout_gravity="center_vertical" />
 
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/feedback"
+        android:layout_height="40dp"
+        android:background="#ffffff" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="意见反馈"
+            android:id="@+id/textView13"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000" />
+
+       <!-- <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="未启用"
+            android:id="@+id/textView15"
+            android:layout_gravity="center_vertical" />
+-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right_b"
+            android:id="@+id/imageView4"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center_vertical" />
     </LinearLayout>
 
     <View

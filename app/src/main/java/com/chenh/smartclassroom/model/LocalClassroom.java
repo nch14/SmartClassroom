@@ -2,7 +2,6 @@ package com.chenh.smartclassroom.model;
 
 import android.os.Handler;
 
-import com.chenh.smartclassroom.net.Client;
 import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.view.classroom.OpenClassroomListFragment;
 import com.chenh.smartclassroom.vo.Classroom;
@@ -47,6 +46,27 @@ public class LocalClassroom {
         c.currentNumOfStudents=4;
         c.humidity=""+38;
         c.name="仙Ⅱ102";
+        c.temperature="22℃";
+        c.state=Classroom.OPEN;
+        mClassrooms.add(c);
+        c=new Classroom();
+        c.currentNumOfStudents=4;
+        c.humidity=""+38;
+        c.name="仙Ⅱ103";
+        c.temperature="22℃";
+        c.state=Classroom.OPEN;
+        mClassrooms.add(c);
+        c=new Classroom();
+        c.currentNumOfStudents=4;
+        c.humidity=""+38;
+        c.name="仙Ⅱ104";
+        c.temperature="22℃";
+        c.state=Classroom.OPEN;
+        mClassrooms.add(c);
+        c=new Classroom();
+        c.currentNumOfStudents=4;
+        c.humidity=""+38;
+        c.name="仙Ⅱ105";
         c.temperature="22℃";
         c.state=Classroom.OPEN;
         mClassrooms.add(c);

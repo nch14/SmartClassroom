@@ -96,6 +96,8 @@ public class ContentActivity extends AppCompatActivity {
 
                     /*fab.show();
                     fab.setImageResource(R.drawable.ic_mode_edit_white_36dp);*/
+                }else if (position==4){
+                    fab.hide();
                 }
             }
 

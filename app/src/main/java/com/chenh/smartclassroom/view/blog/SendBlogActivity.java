@@ -60,6 +60,8 @@ public class SendBlogActivity extends AppCompatActivity {
                 dialog.show(fm,"");
             }
         });
+
+
     }
 
 
@@ -81,8 +83,7 @@ public class SendBlogActivity extends AppCompatActivity {
         if (id == R.id.action_commit) {
             if (content.getText().toString()!=null){
                 String contentText=content.getText().toString();
-                contentText.replace(topic,"");
-                contentText.replace("#","");
+                contentText = contentText.replace(topic,"").replace("#","");
                 JSONObject json=new JSONObject();
                 try {
                     json.put("op", NetController.CREATE_BLOG_MESSAGE);

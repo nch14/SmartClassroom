@@ -1,11 +1,13 @@
 package com.chenh.smartclassroom.view.classroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -57,6 +59,13 @@ public class OpenClassroomListFragment extends ContentFragment {
         mClassrooms = (ListView) rootView.findViewById(R.id.listView);
         mClassrooms.setAdapter(mAdpater);
         mClassrooms.setEmptyView(rootView.findViewById(R.id.emptyView));
+        mClassrooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(),ClassroomDetailActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 
@@ -86,14 +95,13 @@ public class OpenClassroomListFragment extends ContentFragment {
             classroomName.setText(classroom.name);
 
             TextView classroomState= (TextView) convertView.findViewById(R.id.t_h);
-            classroomState.setText("当前温度为："+classroom.temperature+"，湿度为："+classroom.humidity);
+            classroomState.setText("当前"+classroom.temperature+"，湿度："+classroom.humidity);
 
             TextView classroomNum= (TextView) convertView.findViewById(R.id.num_of_people);
             classroomNum.setText("当前："+classroom.currentNumOfStudents+"人");
 
             return convertView;
         }
-
     }
 
 }

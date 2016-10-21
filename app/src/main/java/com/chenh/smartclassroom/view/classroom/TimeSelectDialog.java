@@ -76,7 +76,7 @@ public class TimeSelectDialog extends DialogFragment {
                 int day=dayPicker.getValue();
                 int hour=hourPicker.getValue();
                 int min=minPicker.getValue();
-                ((ApplyForClassroomActivity)getActivity()).setTime(operation,Calendar.getInstance().get(Calendar.YEAR)+"-"+((month>9)?month:"0"+month)+"-"+((day>9)?day:"0"+day)+" "+((hour>9)?hour:"0"+hour)+":"+((min>9)?min:"0"+min));
+               // ((ApplyForClassroomActivity)getActivity()).setTime(operation,Calendar.getInstance().get(Calendar.YEAR)+"-"+((month>9)?month:"0"+month)+"-"+((day>9)?day:"0"+day)+" "+((hour>9)?hour:"0"+hour)+":"+((min>9)?min:"0"+min));
             }
         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

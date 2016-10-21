@@ -26,6 +26,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+    <ScrollView
+        android:layout_below="@id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -40,6 +46,32 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/apply_org"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView27"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textWebEditText"
+                    android:text=""
+                    android:background="@android:drawable/edit_text"
+                    android:ems="10"
+                    android:id="@+id/editText2"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="12dp"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp">
 
@@ -48,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:text="申请原因"
                     android:id="@+id/textView"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -64,6 +96,56 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/contact_numbers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textWebEditText"
+                    android:text=""
+                    android:background="@android:drawable/edit_text"
+                    android:ems="10"
+                    android:id="@+id/contact_number"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="12dp"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/campus_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/campus_select"
+                    android:layout_marginLeft="12dp"/>
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,7 +154,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="开始时间"
+                    android:text="借用日期"
                     android:id="@+id/textView2"
                     android:layout_weight="1"
                     android:textSize="14dp"
@@ -82,7 +164,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2016年1月12日"
+                    android:text=""
                     android:id="@+id/start_time_view"
                     android:textSize="14dp"
                     android:paddingTop="4dp"
@@ -96,63 +178,73 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:text="@string/start_section"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="结束时间"
-                    android:id="@+id/textView3"
-                    android:textSize="14dp"
                     android:layout_weight="1"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2016年1月12日"
-                    android:id="@+id/end_time_view"
-                    android:textSize="14dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_chevron_right_b"
-                    android:id="@+id/imageView_end_time" />
-            </LinearLayout>
-
-           <!-- <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="成员学号"
-                    android:id="@+id/textView4" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
-                    android:inputType="textMultiLine"
-                    android:scrollbars="vertical"
-                    android:background="@android:drawable/edit_text"
-                    android:gravity="top"
-                    android:id="@+id/editText2"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="12dp"
-                    android:hint="请用分号（;）隔开"
                     android:textSize="14sp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/start_section_select"
+                    android:layout_marginLeft="12dp"/>
+
+
             </LinearLayout>
--->
+
+            <LinearLayout
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/last_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/last_section_select"
+                    android:layout_marginLeft="12dp"/>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/tutor_department"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tutor_department"
+                    android:layout_marginLeft="12dp"/>
+
+
+            </LinearLayout>
+
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -166,13 +258,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="请选择教室类型"
+                        android:text="教室类型"
                         android:id="@+id/textView5"
                         android:layout_weight="1" />
 
                     <RadioGroup
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -202,6 +294,10 @@
 
 
         </LinearLayout>
+
+    </ScrollView>
+
+
 
 
 </RelativeLayout>

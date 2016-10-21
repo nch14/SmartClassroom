@@ -33,4 +33,21 @@
     <string name="take_photo_now">拍照</string>
     <string name="choose_from_glary">从相册选取</string>
 
+
+    <string name="apply_org">申请单位</string>
+
+    <string name="contact_numbers">联系电话</string>
+
+    <string name="campus_name">校区</string>
+
+    <string name="start_section">开始节次</string>
+
+    <string name="last_section">节数</string>
+
+    <string name="tutor_department">指导老师所在部门</string>
+    <string name="title_activity_blog">BlogActivity</string>
+    <string name="title_activity_course_or_plan">CourseOrPlanActivity</string>
+    <string name="title_activity_classroom_detail">ClassroomDetailActivity</string>
+
+
 </resources>

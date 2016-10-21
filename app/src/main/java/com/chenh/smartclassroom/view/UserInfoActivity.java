@@ -1,7 +1,6 @@
 package com.chenh.smartclassroom.view;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +18,7 @@ import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.util.Base64Image;
 import com.chenh.smartclassroom.util.HeadUtil;
 import com.chenh.smartclassroom.util.json.JsonUtil;
+import com.chenh.smartclassroom.view.common.OneLineFillActivity;
 import com.chenh.smartclassroom.vo.User;
 
 import org.json.JSONException;

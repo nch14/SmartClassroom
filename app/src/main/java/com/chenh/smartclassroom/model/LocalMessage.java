@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.chenh.smartclassroom.net.Client;
 import com.chenh.smartclassroom.net.NetController;
+import com.chenh.smartclassroom.view.blog.BlogActivity;
 import com.chenh.smartclassroom.view.blog.BlogFragment;
 import com.chenh.smartclassroom.vo.AttitudeVO;
 import com.chenh.smartclassroom.vo.BlogMessage;
@@ -66,7 +67,7 @@ public class LocalMessage {
         maxId=this.blogMessages.get(0).id;
         sinceId=this.blogMessages.get(this.blogMessages.size()-1).id;
         if (mHandler!=null)
-            mHandler.sendMessage(mHandler.obtainMessage(BlogFragment.LOAD_FINISHED,""));
+            mHandler.sendMessage(mHandler.obtainMessage(BlogActivity.LOAD_FINISHED,""));
     }
 
     public void addAttitudes(long sheetId,ArrayList<AttitudeVO> attitudeVOs){
@@ -88,7 +89,7 @@ public class LocalMessage {
                 blogMessage.dislike.add(attitudeVO);
             }
         }
-            mHandler.sendMessage(mHandler.obtainMessage(BlogFragment.NOTIFY,""));
+            mHandler.sendMessage(mHandler.obtainMessage(BlogActivity.NOTIFY,""));
     }
 
     public void loadMore() {

@@ -38,7 +38,11 @@ public class LocalCourse {
     public static void setCourses(ArrayList<TimeTableCourse> cs){
         courses=cs;
         mHandler.sendMessage(mHandler.obtainMessage(1,"refresh"));
+    }
 
+    public static void addCourse(ArrayList<TimeTableCourse> cs){
+        courses.addAll(cs);
+       // mHandler.sendMessage(mHandler.obtainMessage(1,"refresh"));
     }
 
 

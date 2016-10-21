@@ -1,52 +1,39 @@
 package com.chenh.smartclassroom.view.classroom;
 
 import android.app.FragmentManager;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chenh.smartclassroom.R;
-import com.chenh.smartclassroom.model.LocalAvailableClassroom;
-import com.chenh.smartclassroom.net.Client;
-import com.chenh.smartclassroom.net.NetController;
-import com.chenh.smartclassroom.util.TimeUtil;
+import com.chenh.smartclassroom.view.common.DialogCallBack;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.io.IOException;
+import java.util.HashMap;
 
 public class ApplyForClassroomActivity extends AppCompatActivity {
 
-    private ImageView startTime;
-    private ImageView endTime;
+    private ImageView startTimeButton;
 
-    private TextView startTimeView;
-    private TextView endTimeView;
+    private Spinner mCampusSelect;
+    private Spinner mStartSection;
+    private Spinner mLastSection;
+    private Spinner mTutor;
 
-    private boolean setStart;
-    private boolean setEnd;
-
-    private Handler mHandler;
-  /*  private ListView listView;
-    private ArrayAdapter mAdpater;
-    private ArrayList<String> data;*/
-
-    public static final int START_TIME = 1;
-    public static final int END_TIME = 2;
-    public static final int LOAD_CLASSROOM_FINISHED = 3;
+    private TextView dateSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,52 +47,49 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(ApplyForClassroomActivity.this,"操作取消",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
 
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                int what = msg.what;
-                String message = msg.obj.toString();
+        startTimeButton = (ImageView) findViewById(R.id.imageView_start_time);
+        startTimeButton.setOnClickListener(new InnerListener());
 
-                switch (what) {
-                    case LOAD_CLASSROOM_FINISHED:
-                        //mAdpater.notifyDataSetChanged();
-                        break;
-                }
-            }
-        };
+        ArrayAdapter<String> campusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,new String[]{"仙林","鼓楼"});
+        campusAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+        mCampusSelect= (Spinner) findViewById(R.id.campus_select);
+        mCampusSelect.setAdapter(campusAdapter);
 
-        /*//透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //透明导航栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);*/
+        ArrayAdapter<String> startSectionAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"1（8：00-）","2（9：00-）","3（10：10-）","4（11：10-）","5（14：00-）",
+                        "6（15：00-）","7（16：10-）","8（17：10-）", "9（18：30-）","10（19：30-）",
+                        "11（20：30-）","12（21：30-）"});
+        campusAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+        mStartSection= (Spinner) findViewById(R.id.start_section_select);
+        mStartSection.setAdapter(startSectionAdapter);
 
-/*        LocalAvailableClassroom.getLocalClassroom().addHandler(mHandler);
-        data = LocalAvailableClassroom.getLocalClassroom().getClassroom();
-        listView = (ListView) findViewById(R.id.listView);
-        mAdpater = new ArrayAdapter(this, android.R.layout.simple_list_item_1, data);
-        listView.setAdapter(mAdpater);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String s=data.get(i);
-            }
-        });*/
+        ArrayAdapter lastSection = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+                new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12});
+        campusAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+        mLastSection= (Spinner) findViewById(R.id.last_section_select);
+        mLastSection.setAdapter(lastSection);
 
+        ArrayAdapter<String> tutorAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+                new String[]{"院系辅导员","社团联合会","就业指导中心","国际合作与交流处","学生工作处","校团委"});
+        campusAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+        mTutor= (Spinner) findViewById(R.id.tutor_department);
+        mTutor.setAdapter(tutorAdapter);
 
-        startTime = (ImageView) findViewById(R.id.imageView_start_time);
-        startTime.setOnClickListener(new InnerListener());
-
-        endTime = (ImageView) findViewById(R.id.imageView_end_time);
-        endTime.setOnClickListener(new InnerListener());
-
-        startTimeView = (TextView) findViewById(R.id.start_time_view);
-        startTimeView.setText("");
-        endTimeView = (TextView) findViewById(R.id.end_time_view);
-        endTimeView.setText("");
+        dateSelect = (TextView) findViewById(R.id.start_time_view);
     }
 
 
@@ -139,73 +123,50 @@ public class ApplyForClassroomActivity extends AppCompatActivity {
         public void onClick(View view) {
             int id = view.getId();
             FragmentManager fm;
-            TimeSelectDialog dialog;
+            DateSelectDialog dialog;
             switch (id) {
                 case R.id.imageView_start_time:
                     fm = getFragmentManager();
-                    dialog = TimeSelectDialog.getTimeSelectDialog(START_TIME);
-                    dialog.show(fm, "");
-                    break;
-                case R.id.imageView_end_time:
-                    fm = getFragmentManager();
-                    dialog = TimeSelectDialog.getTimeSelectDialog(END_TIME);
+                    dialog = DateSelectDialog.getDialog(new DialogCallBack(){
+                        @Override
+                        public void callBack(String s) {
+                            dateSelect.setText(s);
+                        }
+                    });
                     dialog.show(fm, "");
                     break;
             }
         }
     }
 
-
-    private void askForClassroom() {
-        new Thread(new Runnable() {
+    private void push(){
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
+                HashMap<String,String> data=new HashMap<>();
+                data.put("userName",mID.getText().toString());
+                data.put("password",mPWD.getText().toString());
 
-            }
-        }).start();
-    }
-
-    public void setTime(int operation, String s) {
-        switch (operation) {
-            case START_TIME:
-                startTimeView.setText(s);
-                setStart = true;
-                break;
-            case END_TIME:
-                endTimeView.setText(s);
-                setEnd = true;
-                break;
-        }
-
-        if (setEnd && setStart) {
-            Date start = TimeUtil.getDate(startTimeView.getText().toString() + ":000");
-            Date end = TimeUtil.getDate(endTimeView.getText().toString() + ":000");
-            if (start.getTime() > end.getTime()) {
-                Toast.makeText(this, "开始时间必须在结束时间之前", Toast.LENGTH_SHORT).show();
-                switch (operation) {
-                    case START_TIME:
-                        startTimeView.setText("");
-                        setStart = false;
-                        break;
-                    case END_TIME:
-                        endTimeView.setText("");
-                        setEnd = false;
-                        break;
-                }
-            } else {
-                JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("op", NetController.ASK_FOR_AVAILABLE_CLASSROOM);
-                    jsonObject.put("startTime", TimeUtil.getTime(start));
-                    jsonObject.put("endTime", TimeUtil.getTime(end));
-                    String message = jsonObject.toString();
-                    NetController.getNetController().addTask(message);
-                } catch (JSONException e) {
+                    Connection.Response index = Jsoup.connect("http://jw.nju.edu.cn:8080/jiaowu/login.do").data(data).timeout(1000).execute();
+                    Document doc = index.parse();
+                    Elements lb=doc.select("label");
+                    if (lb.size()!=0) {
+                        String text = lb.get(0).text();
+                        if (text.equals("用户名或密码错误！")){
+                            passwordIsValid=2;
+                        }
+                    }else
+                        passwordIsValid=1;
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
+        }).start();*/
 
-        }
+
+
+
     }
+
 }

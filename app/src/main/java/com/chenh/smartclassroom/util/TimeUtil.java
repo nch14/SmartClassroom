@@ -67,4 +67,14 @@ public class TimeUtil {
         return b[month-1];
     }
 
+    public static int getWeek(){
+        String start="2016-08-29 0:0:0";
+        Date startDate=getDate(start);
+
+        Date date=new Date();
+        int result =  (int)((date.getTime()-startDate.getTime())/1000/3600/24/7)+1;
+
+        return result;
+    }
+
 }

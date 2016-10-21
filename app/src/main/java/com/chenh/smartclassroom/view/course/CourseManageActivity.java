@@ -14,7 +14,7 @@ import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.NetController;
 import com.chenh.smartclassroom.view.ConfigActivity;
-import com.chenh.smartclassroom.view.OneLineFillActivity;
+import com.chenh.smartclassroom.view.common.OneLineFillActivity;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
