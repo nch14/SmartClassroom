@@ -31,6 +31,7 @@ public abstract class ConfigActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
 

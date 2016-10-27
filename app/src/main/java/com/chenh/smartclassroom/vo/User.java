@@ -24,6 +24,6 @@ public class User implements Serializable {
 
     public String university;//所在学校
 
-    public boolean courseEnabled;//是否启用课程表
+    public boolean onLine;//是否启用课程表
 
 }

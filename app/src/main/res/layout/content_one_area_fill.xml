@@ -26,6 +26,7 @@
             android:layout_height="100dp"
             android:inputType="textMultiLine"
             android:scrollbars="vertical"
+            android:gravity="top"
             android:background="@android:drawable/edit_text"
             android:layout_weight="0.6" />
     </LinearLayout>

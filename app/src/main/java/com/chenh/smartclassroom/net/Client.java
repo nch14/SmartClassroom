@@ -55,15 +55,15 @@ public class Client {
             JSONObject json = new JSONObject(s);
             int op=json.getInt("rp");
             switch (op) {
-                case NetController.LOGIN_RESULT:
-                    ClientCallBackProcess.loginCallBack(json,true);
+                case NetController.USER_RESULT:
+                    ClientCallBackProcess.getUserBack(json);
                     break;
                 case NetController.SHOW_OPEN_CLASSES_RESULT:
                     ClientCallBackProcess.doOpenClass(json);
                     break;
-                case NetController.FAIL_LOGIN:
+               /* case NetController.FAIL_LOGIN:
                     ClientCallBackProcess.loginCallBack(json,false);
-                    break;
+                    break;*/
                 case NetController.LOAD_BLOG_MESSAGE_RESULT:
                     ClientCallBackProcess.doLoadBlogMessage(json);
                     break;
@@ -87,7 +87,8 @@ public class Client {
         }
     }
 
-    public void startWorking() {
+    public void startWorking(String initTask) {
+        messages.add(initTask);
         //有没有要读的。要读就读一下
         new Thread(new Runnable() {
             public void run() {

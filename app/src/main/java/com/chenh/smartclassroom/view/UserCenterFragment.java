@@ -36,7 +36,6 @@ import org.json.JSONObject;
 public class UserCenterFragment extends ContentFragment {
 
     private ImageView head;
-    private TextView course_used;
 
     private TextView version_code;
 
@@ -61,10 +60,6 @@ public class UserCenterFragment extends ContentFragment {
                 startActivity(intent);
             }
         });
-
-        course_used=(TextView)rootView.findViewById(R.id.course_enabled);
-        if (user.courseEnabled)
-            course_used.setText("已启用");
 
         version_code= (TextView) rootView.findViewById(R.id.version_code);
         getAPPVersion();
@@ -136,11 +131,11 @@ public class UserCenterFragment extends ContentFragment {
         if (resultCode== Activity.RESULT_CANCELED)
             return;
         String itemValue=data.getStringExtra("ITEM_VALUE");
+        JSONObject message=new JSONObject();
         switch (requestCode){
             case CHANGE_PASSWORD:
                 User user = LocalUser.getLocalUser().getUser();
                 user.password = itemValue;
-                JSONObject message=new JSONObject();
                 try {
                     message.put("op", NetController.REFRESH_USER);
                     message.put("user",JsonUtil.pack(user));
@@ -153,7 +148,13 @@ public class UserCenterFragment extends ContentFragment {
                 startActivity(intent);
                 break;
             case FEEDBACK:
-
+                try {
+                    message.put("op", NetController.SUGGESTIONS);
+                    message.put("suggestion",itemValue);
+                    NetController.getNetController().addTask(message.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }

@@ -8,9 +8,6 @@ import android.widget.EditText;
 
 import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.view.ConfigActivity;
-
-import static android.text.InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE;
-
 /**
  * Created by carlos on 2016/10/17.
  */

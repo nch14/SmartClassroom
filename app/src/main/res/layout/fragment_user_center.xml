@@ -36,19 +36,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="课程表"
+            android:text="@string/import_course_items"
             android:id="@+id/textView4"
             android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:textColor="#000000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="未启用"
-            android:id="@+id/course_enabled"
-            android:layout_gravity="center_vertical" />
 
         <ImageView
             android:layout_width="wrap_content"

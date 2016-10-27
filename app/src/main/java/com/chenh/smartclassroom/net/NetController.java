@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.chenh.smartclassroom.util.CurrentStateTool;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,7 +20,10 @@ import java.net.Socket;
 public class NetController {
 
     public final static int FAIL_LOGIN =0;
-    public final static int LOGIN=1;
+    public final static int LOGIN=21001;
+    public final static int CONNECT=10001;
+    public final static int USER_RESULT=10002;
+
     public final static int LOGIN_RESULT=2;
     public final static int SHOW_OPEN_CLASSES=3;
     public final static int SHOW_OPEN_CLASSES_RESULT=4;
@@ -43,8 +49,7 @@ public class NetController {
     public final static int ADD_USER_COURSE=1103;
     public final static int REFRESH_USER=1301;
     public final static int FORGET_PASSWORD=1401;
-
-
+    public final static int SUGGESTIONS=1601;
 
     public static final int PUT_HEAD = 0;
     public static final int GET_HEAD = 1;
@@ -54,7 +59,7 @@ public class NetController {
     public static final String IP_ADDR = "115.159.48.160";//服务器地址  这里要改成服务器的ip
     public static final int APP_PORT = 12346;//服务器端口号
 
-    public static final int PIC_SERVICE_PORT=12347;//图片服务端口
+    public static final int INSTANT_SERVICE_PORT =12347;//图片服务端口
 
     private int maxRetryTimes=5;
 
@@ -68,21 +73,31 @@ public class NetController {
 
     private static NetController mNetController;
 
-    public static void createNetController(){
-        mNetController=new NetController();
+    private String userID;
+    private String password;
+    private String initMessage;
+
+    public static void createNetController(String id,String password){
+        mNetController=new NetController(id,password);
     }
     public static NetController getNetController(){
-        if (mNetController==null)
-            mNetController=new NetController();
         return mNetController;
     }
 
-    private NetController(){
+    private NetController(String id,String password){
+        userID=id;
+        this.password=password;
         controllerStart();
     }
 
     private void controllerStart(){
         client=new Client();
+        try {
+            initMessage = new JSONObject().put("op",CONNECT).put("id",userID).put("password",password).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //这是一个工作线程
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -114,7 +129,7 @@ public class NetController {
         Log.e("netError","2333333333333333333333网络被重置");
         try {
             client.setSocket(new Socket(NetController.IP_ADDR, NetController.APP_PORT));
-            client.startWorking();
+            client.startWorking(initMessage);
             netState=true;
             retryTimes=0;
         } catch (IOException e) {
@@ -138,9 +153,10 @@ public class NetController {
     }
 
     private void notifyUnableToConnectServer(){
-        Handler handler= CurrentStateTool.getCurrentHandler();
-        handler.sendMessage(handler.obtainMessage(23333,""));
+        /*Handler handler= CurrentStateTool.getCurrentHandler();
+        handler.sendMessage(handler.obtainMessage(23333,""));*/
     }
+
 
     /**
      * 不允许在主线程中调用该方法！！！
@@ -148,8 +164,8 @@ public class NetController {
      * @return
      * @throws IOException
      */
-    public String callPicService(String s) throws IOException {
-        Socket socket = new Socket(NetController.IP_ADDR, NetController.PIC_SERVICE_PORT);
+    public static String callInstantNetService(String s) throws IOException {
+        Socket socket = new Socket(NetController.IP_ADDR, NetController.INSTANT_SERVICE_PORT);
         DataOutputStream outputStream;
         String writeMessageCache=s;
         outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));

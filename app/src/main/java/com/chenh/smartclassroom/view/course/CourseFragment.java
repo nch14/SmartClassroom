@@ -86,13 +86,11 @@ public class CourseFragment extends ContentFragment {
             }
         };
 
-        if (!LocalUser.getLocalUser().getUser().courseEnabled) {
-            LocalCourse.courses = new ArrayList<>();
-        } else if (LocalCourse.courses == null) {
+        if (LocalCourse.courses == null) {
             LocalCourse.courses = new ArrayList<>();
             LocalCourse.getCourse(mHandler);
 
-        } else if (LocalUser.getLocalUser().getUser().courseEnabled && LocalCourse.courses != null) {
+        } else if (LocalUser.getLocalUser().getUser().onLine && LocalCourse.courses != null) {
             initWeekCourseView();
         }
         initWeekNameView();
@@ -149,7 +147,6 @@ public class CourseFragment extends ContentFragment {
         }
     }
 
-
     /**
      * 初始化课程表
      */
@@ -198,12 +195,12 @@ public class CourseFragment extends ContentFragment {
             if (i == 0) {
                 for (int j = 0; j < course.startSection - 1; j++)
                     addEmptyTimeViewToHelpInit(ll, weekDayIndex, j);
-                frameLp.setMargins(0, /*(course.startSection - 1) * itemHeight*/0, 0, 0);
             } else {
                 for (int j = (firstCourse.startSection + firstCourse.lastSection); j < course.startSection; j++)
                     addEmptyTimeViewToHelpInit(ll, weekDayIndex, j);
-                frameLp.setMargins(0, /*(course.startSection - (firstCourse.startSection + firstCourse.lastSection)) * itemHeight*/0, 0, 0);
             }
+            frameLp.setMargins(0, 0, 0, 0);
+
             tv.setLayoutParams(tvLp);
             tv.setGravity(Gravity.CENTER);
             tv.setTextSize(12);
@@ -218,7 +215,13 @@ public class CourseFragment extends ContentFragment {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showToast("即将支持查看更多信息。预计在0.3版本中推出");
+                    Intent intent;
+                    if (course.courseType.equals("自定义"))
+                        intent = new Intent(getActivity(),PlanDetailActivity.class);
+                    else
+                        intent = new Intent(getActivity(),CourseDetailActivity.class);
+                    intent.putExtra("course",course);
+                    startActivity(intent);
                 }
             });
         }
@@ -235,7 +238,7 @@ public class CourseFragment extends ContentFragment {
         FrameLayout emptyLayout = new FrameLayout(getActivity());
         LinearLayout.LayoutParams emptyLayoutLp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                itemHeight * 1);
+                itemHeight);
         LinearLayout.LayoutParams tvLp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
@@ -326,11 +329,38 @@ public class CourseFragment extends ContentFragment {
         for (int i = 0; i < timeTableCourses.length; i++)
             timeTableCourses[i] = new ArrayList<>();
 
-
         for (TimeTableCourse t : localCourse)
             timeTableCourses[getNumFromCh(t.courseDate)].add(t);
 
+        courseTest(timeTableCourses);
         return timeTableCourses;
+    }
+
+    /**
+     * 对传入的TimeTableCourse进行数据检查
+     *
+     * @param t
+     */
+    private void courseTest(List<TimeTableCourse>[] t) {
+        //排序并去重
+        for (int i = 0; i < t.length; i++) {
+            List<TimeTableCourse> oneDayList = t[i];
+            Collections.sort(oneDayList, new Comparator<TimeTableCourse>() {
+                @Override
+                public int compare(TimeTableCourse t1, TimeTableCourse t2) {
+                    return t1.startSection - t2.startSection;
+                }
+            });
+            for (int j = 0; j + 1 < oneDayList.size(); j++) {
+                TimeTableCourse t1 = oneDayList.get(j);
+                TimeTableCourse t2 = oneDayList.get(j + 1);
+                if (t1.startSection == t2.startSection) {
+                    oneDayList.remove(t2);
+                    j--;
+                }
+            }
+        }
+        System.out.print("hhh");
     }
 
     private int getNumFromCh(String s) {

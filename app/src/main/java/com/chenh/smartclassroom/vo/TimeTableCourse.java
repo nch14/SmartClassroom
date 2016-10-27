@@ -1,12 +1,13 @@
 package com.chenh.smartclassroom.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * 把课程翻译成课程表存进数据库
  * Created by chenh on 2016/9/10.
  */
-public class TimeTableCourse {
+public class TimeTableCourse implements Serializable {
 
     /**
      * 学号

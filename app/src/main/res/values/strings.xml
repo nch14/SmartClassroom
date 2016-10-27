@@ -48,6 +48,8 @@
     <string name="title_activity_blog">BlogActivity</string>
     <string name="title_activity_course_or_plan">CourseOrPlanActivity</string>
     <string name="title_activity_classroom_detail">ClassroomDetailActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="import_course_items">导入课程表</string>
 
 
 </resources>

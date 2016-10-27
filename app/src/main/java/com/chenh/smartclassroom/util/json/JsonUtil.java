@@ -10,9 +10,6 @@ import com.chenh.smartclassroom.vo.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Time;
-import java.util.Date;
-
 /**
  * Created by chenh on 2016/7/27.
  */
@@ -58,7 +55,7 @@ public class JsonUtil {
             user.username=json.getString("username");
             user.nickName=json.getString("nickName");
             user.motto=json.getString("motto");
-            user.courseEnabled=json.getBoolean("courseEnabled");
+            user.onLine =json.getBoolean("onLine");
             user.university=json.getString("university");
             return user;
         } catch (JSONException e) {
@@ -77,7 +74,7 @@ public class JsonUtil {
             json.put("nickName",user.nickName);
             json.put("motto",user.motto);
             json.put("university",user.university);
-            json.put("courseEnabled",user.courseEnabled);
+            json.put("onLine",user.onLine);
             return json;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -149,7 +146,7 @@ public class JsonUtil {
             timeTableCourse.courseName=json.getString("courseName");
             timeTableCourse.courseTeacher=json.getString("courseTeacher");
             timeTableCourse.courseType=json.getString("courseType");
-           // timeTableCourse.note=json.getString("note");
+            timeTableCourse.note=json.getString("note");
             timeTableCourse.campus=json.getString("campus");
             timeTableCourse.startSection=json.getInt("startSection");
             timeTableCourse.lastSection=json.getInt("lastSection");

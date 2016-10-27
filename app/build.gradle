@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.chenh.smartclassroom"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 8
-        versionName "16.10.18beta"
+        versionCode 10
+        versionName "0.2.9.1"
     }
     buildTypes {
         release {
@@ -24,9 +24,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // https://mvnrepository.com/artifact/org.json/json
     //compile 'org.json:json:20160212'
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:design:24.1.1'
-    compile 'com.android.support:support-v4:24.1.1'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
     compile 'commons-io:commons-io:2.4'
     compile 'com.jph.takephoto:takephoto_library:3.0.0'
     // https://mvnrepository.com/artifact/net.iharder/base64

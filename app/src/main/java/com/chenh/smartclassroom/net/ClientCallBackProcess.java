@@ -25,18 +25,11 @@ import java.util.ArrayList;
 public class ClientCallBackProcess {
 
 
-    public static void loginCallBack(JSONObject json, boolean success){
-        if (success){
-            User user= JsonUtil.getUser(json);
-            LocalUser.getLocalUser().loginCallBack(user);
-        }else {
-            try {
-                String message=json.getString("message");
-                LocalUser.getLocalUser().loginCallBack(message);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+    public static void getUserBack(JSONObject json){
+        try {
+            LocalUser.setLocalUser(JsonUtil.getUser(json.getJSONObject("user")));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

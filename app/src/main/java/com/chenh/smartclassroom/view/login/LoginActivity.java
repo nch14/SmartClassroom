@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
-import android.os.Message;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,10 +17,9 @@ import android.widget.Toast;
 import com.chenh.smartclassroom.R;
 import com.chenh.smartclassroom.model.LocalUser;
 import com.chenh.smartclassroom.net.NetController;
-import com.chenh.smartclassroom.util.CurrentStateTool;
+import com.chenh.smartclassroom.util.json.JsonUtil;
 import com.chenh.smartclassroom.view.ContentActivity;
 import com.chenh.smartclassroom.view.common.LoadingDiaolog;
-
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,18 +30,12 @@ import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
-
-    public static final int LOGIN_SUCCESS=1;
-    public static final int LOGIN_FAIL=2;
-
     private EditText userNameView;
     private EditText passwordView;
 
     private Button loginButton;
 
     private TextView sendPassword;
-
-    private Handler handler;
 
     private LoadingDiaolog dialog;
 
@@ -52,41 +44,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        handler=new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                int what=msg.what;
-                String words= (String) msg.obj;
-
-                switch (what){
-                    case LOGIN_SUCCESS:
-                        //hideLoadingDialog();
-                        saveUser(new String[]{userNameView.getText().toString(),passwordView.getText().toString()});
-                        Intent intent=new Intent(LoginActivity.this, ContentActivity.class);
-                        startActivity(intent);
-                        finish();
-                        break;
-                    case LOGIN_FAIL:
-                        hideLoadingDialog();
-                        Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
-                        passwordView.setText("");
-                        break;
-                    case 23333:
-                        hideLoadingDialog();
-                        ConnectivityManager connMgr = (ConnectivityManager)
-                                getSystemService(Context.CONNECTIVITY_SERVICE);
-                        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-                        if (networkInfo != null && networkInfo.isConnected()) {
-                            words="服务器好像又宕机了";
-                        } else {
-                            words="请检查您的网络";
-                        }
-                        Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        };
-        CurrentStateTool.setCurrentHandler(handler);
         showLogin();
 
         //如果存在这样一个auto字符串，说明此处未注销登陆后返回登陆界面。无需执行自动登陆选项。
@@ -94,8 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         if (auto==null) {
             autoLogin();
         }
-        LocalUser.getLocalUser().giveHandler(handler);
-
     }
 
     private void showLogin(){
@@ -163,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-
     private void showLoadingDialog(){
         FragmentManager fm=getFragmentManager();
         dialog= new LoadingDiaolog();
@@ -174,8 +128,6 @@ public class LoginActivity extends AppCompatActivity {
         if (dialog!=null)
             dialog.dismiss();
     }
-
-
 
     private void autoLogin(){
         String[] keys=loadUser();
@@ -189,15 +141,63 @@ public class LoginActivity extends AppCompatActivity {
     private void login(){
         loginButton.requestFocus();
         showLoadingDialog();
-        JSONObject jsonObject=new JSONObject();
-        try {
-            jsonObject.put("op", NetController.LOGIN);
-            jsonObject.put("id",userNameView.getText().toString());
-            jsonObject.put("password",passwordView.getText().toString());
-            NetController.getNetController().addTask(jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        new AsyncTask<String[], Void, JSONObject>() {
+            @Override
+            protected JSONObject doInBackground(String[]... strings) {
+
+                try {
+                    String result = NetController.callInstantNetService(new JSONObject()
+                            .put("id",strings[0][0]).put("password",strings[0][1]).put("op",NetController.LOGIN).toString());
+                    return new JSONObject(result);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(JSONObject json) {
+                if (dialog!=null)
+                    hideLoadingDialog();
+
+                if (json==null){
+                    String words;
+                    ConnectivityManager connMgr = (ConnectivityManager)
+                            getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                    if (networkInfo != null && networkInfo.isConnected()) {
+                        words="服务器异常，无法连接";
+                    } else {
+                        words="请检查您的网络";
+                    }
+                    Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
+                }else {
+                    try {
+                        boolean status= json.getBoolean("status");
+                        if (status){
+                            //login success
+                            LocalUser.setLocalUser(JsonUtil.getUser(json.getJSONObject("user")));
+                            String[] value = new String[]{userNameView.getText().toString(),passwordView.getText().toString()};
+                            saveUser(value);
+                            NetController.createNetController(value[0],value[1]);
+                            startActivity(new Intent(LoginActivity.this, ContentActivity.class));
+                            finish();
+                        }else {
+                            //login failure
+                            String message = json.getString("message");
+                            Toast.makeText(LoginActivity.this,message,Toast.LENGTH_SHORT).show();
+                            passwordView.setText("");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }.execute(new String[]{userNameView.getText().toString(),passwordView.getText().toString()});
     }
 
     private String[] loadUser(){
@@ -205,7 +205,7 @@ public class LoginActivity extends AppCompatActivity {
         File todoFile=new File(filesDir,"user.txt");
         ArrayList<String> items;
         try {
-            items=new ArrayList<String>(FileUtils.readLines(todoFile));
+            items=new ArrayList<>(FileUtils.readLines(todoFile));
         }catch (IOException e){
             items=new ArrayList<>();
         }
@@ -227,5 +227,4 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }

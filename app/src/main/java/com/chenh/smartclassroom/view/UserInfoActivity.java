@@ -219,7 +219,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     json.put("id",user.id);
                     json.put("image", Base64Image.storeImage(Environment.getExternalStorageDirectory() + "/head/" + user.id + ".jpg"));
                     String message = json.toString();
-                    String back = NetController.getNetController().callPicService(message);
+                    String back = NetController.getNetController().callInstantNetService(message);
                     JSONObject result =new JSONObject(back);
                     boolean success = result.getBoolean("status");
 

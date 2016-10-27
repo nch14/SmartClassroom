@@ -1,10 +1,8 @@
 package com.chenh.smartclassroom.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -74,7 +72,7 @@ public class HeadUtil {
 
                     final String message = json.toString();
 
-                    String result = NetController.getNetController().callPicService(message);
+                    String result = NetController.getNetController().callInstantNetService(message);
                     JSONObject back = new JSONObject(result);
                     boolean success = back.getBoolean("status");
                     if (success) {

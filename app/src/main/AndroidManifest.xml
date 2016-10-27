@@ -52,7 +52,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.course.CourseManageActivity"
-            android:label="设置"
+            android:label="@string/import_course_items"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.common.TempAcitivity" />
         <activity
@@ -79,6 +79,20 @@
         <activity
             android:name=".view.classroom.ClassroomDetailActivity"
             android:label="@string/title_activity_classroom_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".net.NetIntentService"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.course.CourseDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".view.course.PlanDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
