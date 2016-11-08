@@ -56,7 +56,7 @@ public class NetController {
     public static final int CHECK_HEAD=2;
 
 //115.159.48.160
-    public static final String IP_ADDR = "115.159.48.160";//服务器地址  这里要改成服务器的ip
+    public static final String IP_ADDR = "192.168.1.106";//服务器地址  这里要改成服务器的ip
     public static final int APP_PORT = 12346;//服务器端口号
 
     public static final int INSTANT_SERVICE_PORT =12347;//图片服务端口

@@ -3,6 +3,7 @@ package com.chenh.smartclassroom.net;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 
@@ -48,6 +49,10 @@ public class NetIntentService extends IntentService {
         while (true){
 
         }
+    }
+
+    public void makeToast(){
+        Toast.makeText(this,"网络无响应",Toast.LENGTH_SHORT).show();
     }
 }
 

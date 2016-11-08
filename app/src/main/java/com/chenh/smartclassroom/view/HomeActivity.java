@@ -39,18 +39,25 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
+                ContentFragment contentFragment=null;
                 switch (id) {
                     case R.id.menu_item_classroom:
+                        contentFragment = ContentFragment.newInstance(1);
                         break;
                     case R.id.menu_item_module:
+                        contentFragment = ContentFragment.newInstance(2);
                         break;
                     case R.id.menu_item_course:
+                        contentFragment = ContentFragment.newInstance(3);
                         break;
                     case R.id.menu_item_message:
+                        contentFragment = ContentFragment.newInstance(4);
                         break;
                     case R.id.menu_item_center:
+                        contentFragment = ContentFragment.newInstance(5);
                         break;
                 }
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,contentFragment).commit();
                 return false;
             }
         });

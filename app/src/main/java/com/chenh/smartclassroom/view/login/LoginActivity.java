@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
         showLogin();
 
-        //如果存在这样一个auto字符串，说明此处未注销登陆后返回登陆界面。无需执行自动登陆选项。
+        //如果存在这样一个auto字符串，说明此处为注销登陆后返回登陆界面。无需执行自动登陆选项。
         String auto=getIntent().getStringExtra("auto");
         if (auto==null) {
             autoLogin();
@@ -142,62 +142,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.requestFocus();
         showLoadingDialog();
 
-        new AsyncTask<String[], Void, JSONObject>() {
-            @Override
-            protected JSONObject doInBackground(String[]... strings) {
-
-                try {
-                    String result = NetController.callInstantNetService(new JSONObject()
-                            .put("id",strings[0][0]).put("password",strings[0][1]).put("op",NetController.LOGIN).toString());
-                    return new JSONObject(result);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(JSONObject json) {
-                if (dialog!=null)
-                    hideLoadingDialog();
-
-                if (json==null){
-                    String words;
-                    ConnectivityManager connMgr = (ConnectivityManager)
-                            getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-                    if (networkInfo != null && networkInfo.isConnected()) {
-                        words="服务器异常，无法连接";
-                    } else {
-                        words="请检查您的网络";
-                    }
-                    Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
-                }else {
-                    try {
-                        boolean status= json.getBoolean("status");
-                        if (status){
-                            //login success
-                            LocalUser.setLocalUser(JsonUtil.getUser(json.getJSONObject("user")));
-                            String[] value = new String[]{userNameView.getText().toString(),passwordView.getText().toString()};
-                            saveUser(value);
-                            NetController.createNetController(value[0],value[1]);
-                            startActivity(new Intent(LoginActivity.this, ContentActivity.class));
-                            finish();
-                        }else {
-                            //login failure
-                            String message = json.getString("message");
-                            Toast.makeText(LoginActivity.this,message,Toast.LENGTH_SHORT).show();
-                            passwordView.setText("");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        }.execute(new String[]{userNameView.getText().toString(),passwordView.getText().toString()});
+       new LoginAsyncTask().execute(new String[]{userNameView.getText().toString(),passwordView.getText().toString()});
     }
 
     private String[] loadUser(){
@@ -225,6 +170,66 @@ public class LoginActivity extends AppCompatActivity {
             FileUtils.writeLines(todoFile,items);
         }catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 完成异步登陆操作
+     */
+    class LoginAsyncTask extends AsyncTask<String, Void, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+
+            try {
+                String result = NetController.callInstantNetService(new JSONObject()
+                        .put("id",strings[0]).put("password",strings[1]).put("op",NetController.LOGIN).toString());
+                return new JSONObject(result);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            if (dialog!=null)
+                hideLoadingDialog();
+
+            if (json==null){
+                String words;
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    words="服务器异常，无法连接";
+                } else {
+                    words="请检查您的网络";
+                }
+                Toast.makeText(LoginActivity.this,words,Toast.LENGTH_SHORT).show();
+            }else {
+                try {
+                    boolean status= json.getBoolean("status");
+                    if (status){
+                        //login success
+                        LocalUser.setLocalUser(JsonUtil.getUser(json.getJSONObject("user")));
+                        String[] value = new String[]{userNameView.getText().toString(),passwordView.getText().toString()};
+                        saveUser(value);
+                        NetController.createNetController(value[0],value[1]);
+                        startActivity(new Intent(LoginActivity.this, ContentActivity.class));
+                        finish();
+                    }else {
+                        //login failure
+                        String message = json.getString("message");
+                        Toast.makeText(LoginActivity.this,message,Toast.LENGTH_SHORT).show();
+                        passwordView.setText("");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
     }
 }

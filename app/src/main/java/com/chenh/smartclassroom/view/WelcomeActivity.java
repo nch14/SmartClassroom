@@ -70,7 +70,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Intent intent;
                 String[] s = loadUser();
                 if (s!=null){
-                    intent=new Intent(WelcomeActivity.this, ContentActivity.class);
+                    intent=new Intent(WelcomeActivity.this, HomeActivity.class);
                 }else {
                     intent=new Intent(WelcomeActivity.this, LoginActivity.class);
                 }
